@@ -26,8 +26,8 @@ define([ 'express' ], function(Express) {
        */
       requirejs([ 'less' ], function(Less) {
         var lessParser = new (Less.Parser)({
-          paths: [ './views', './bower_components/bootstrap/less', './bower_components/bootstrap/less/mixins' ], // Specify search paths for @import directives
-          filename: 'style.less' // Specify a filename, for better error messages
+          paths: [ './views/less', './bower_components/bootstrap/less', './bower_components/bootstrap/less/mixins' ], // Specify search paths for @import directives
+          filename: 'photos.less' // Specify a filename, for better error messages
         });
 
         // import the bootstrap.less file

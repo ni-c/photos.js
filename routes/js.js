@@ -31,6 +31,9 @@ define([ 'express', 'path' ], function(Express, Path) {
       development: 'bower_components/bootstrap/dist/js/bootstrap.js',
       production: 'bower_components/bootstrap/dist/js/bootstrap.min.js'
     },
+    'bootstrap-carousel-swipe': {
+      production: 'bower_components/bootstrap-carousel-swipe/carousel-swipe.js'
+    },
     app: {
       production: 'app/app.js'
     }
@@ -71,6 +74,10 @@ define([ 'express', 'path' ], function(Express, Path) {
 
   Js.get('/lib/bootstrap.js', function(req, res, next) {
     return Js.render('bootstrap', req, res, next);
+  });
+
+  Js.get('/lib/bootstrap-carousel-swipe.js', function(req, res, next) {
+    return Js.render('bootstrap-carousel-swipe', req, res, next);
   });
 
   Js.get('/app.js', function(req, res, next) {

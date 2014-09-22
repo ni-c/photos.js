@@ -42,8 +42,8 @@ requirejs([ 'express', 'config-node', 'jade' ], function(Express, Config, Jade) 
     // Create CSS
     requirejs([ 'less' ], function(Less) {
       var lessParser = new (Less.Parser)({
-        paths: [ './views', './bower_components/bootstrap/less', './bower_components/bootstrap/less/mixins' ], // Specify search paths for @import directives
-        filename: 'style.less' // Specify a filename, for better error messages
+        paths: [ './views/less', './bower_components/bootstrap/less', './bower_components/bootstrap/less/mixins' ], // Specify search paths for @import directives
+        filename: 'photos.less' // Specify a filename, for better error messages
       });
 
       // import the bootstrap.less file
@@ -92,6 +92,8 @@ requirejs([ 'express', 'config-node', 'jade' ], function(Express, Config, Jade) 
     return res.render('index');
   });
 
+  app.use('/photos', Express.static(__dirname + '/photos'));
+  
   // CSS files
   requirejs([ 'routes/css' ], function(Css) {
     app.use('/css', Css);
