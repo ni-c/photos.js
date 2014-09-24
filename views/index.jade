@@ -1,24 +1,7 @@
 extends layout
 
 block content
-  div.navbar.navbar-inverse.navbar-static-top(role="navigation")
-    div.container
-      div.navbar-header
-        button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target=".navbar-collapse")
-          span.sr-only Toggle navigation
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.navbar-brand(href="#") photos.js
-      div.collapse.navbar-collapse
-        ul.nav.navbar-nav
-          li.active
-            a(href="#") Home
-          li
-            a(href="#about") About
-          li
-            a(href="#contact") Contact
-  div.container
+  div.container.image
     div.carousel.slide#carousel-photos(data-ride="carousel")
       div.carousel-inner
         div.item.active
@@ -33,3 +16,58 @@ block content
           img(src="/photos/image5.jpg")
       a.left.carousel-control(href="#carousel-photos", role="button", data-slide="prev")
       a.right.carousel-control(href="#carousel-photos", role="button", data-slide="next")
+
+  div.container-full.description
+    div.container 
+      div.row
+        div.col-md-8
+          h1 A really long and fancy image title
+            br 
+            small 2014-09-24 17:23:42
+          p Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+          p 
+            strong Category:&nbsp;
+            a(href="#") Images
+          p
+            strong Tags:&nbsp;
+            a.tag(href="#")
+              span.label.label-default colorful
+            a.tag(href="#")
+              span.label.label-default rectangular
+            a.tag(href="#")
+              span.label.label-default visible
+            a.tag(href="#")
+              span.label.label-default fancy
+          p
+            strong Shortlink:&nbsp;
+            a(href="#") http://localhost/#
+        div.col-md-4
+          div.panel.panel-default
+            div.panel-heading EXIF Data
+            div.panel-body
+              table.table.table-condensed#exif-table
+                tbody
+                  tr
+                    td.exif-icon
+                      span.exif.exif-camera(title="Camera")
+                    td Canon EOS 1D Mark III
+                  tr
+                    td.exif-icon(title="Focal length")
+                      span.exif.exif-focallength
+                    td 300 mm
+                  tr
+                    td.exif-icon(title="Aperture")
+                      span.exif.exif-aperture
+                    td f/8.0
+                  tr
+                    td.exif-icon(title="Exporuse")
+                      span.exif.exif-time
+                    td 1/250s
+                  tr
+                    td.exif-icon(title="ISO")
+                      span.exif.exif-film
+                    td 100
+                  tr
+                    td.exif-icon(title="Lens")
+                      span.exif.exif-lens
+                    td Tamron 70-300mm f/4-5.6 Di VC US

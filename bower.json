@@ -17,6 +17,7 @@
   "dependencies": {
     "bootstrap": "~3.2.0",
     "requirejs": "~2.1.15",
-    "bootstrap-carousel-swipe": "*"
+    "bootstrap-carousel-swipe": "*",
+    "flag-icon-css": "~0.6.3"
   }
 }

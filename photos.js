@@ -14,7 +14,7 @@ requirejs.config({
   nodeRequire: require
 });
 
-requirejs([ 'express', 'config-node', 'jade' ], function(Express, Config, Jade) {
+requirejs([ 'express', 'config-node', 'jade', 'i18next' ], function(express, config, jade, i18n) {
 
   // Get environment, to start in production environment use:
   // $ NODE_ENV=production node photos.js
@@ -22,51 +22,36 @@ requirejs([ 'express', 'config-node', 'jade' ], function(Express, Config, Jade) 
 
   // Initialize express
   // @see http://expressjs.com/
-  var app = Express();
+  var app = express();
 
   // Set environment
   app.set('env', env);
   app.set('dir', __dirname);
 
   // Create temp directory
-  requirejs([ 'fs', 'path' ], function(Fs, Path) {
-    var tmpDir = Path.join(__dirname, '.tmp');
+  requirejs([ 'fs', 'path' ], function(fs, path) {
+    var tmpDir = path.join(__dirname, '.tmp');
     app.set('tmpDir', tmpDir);
-    if (!Fs.existsSync(tmpDir)) {
-      Fs.mkdirSync(tmpDir);
-      if (!Fs.existsSync(tmpDir)) {
+    if (!fs.existsSync(tmpDir)) {
+      fs.mkdirSync(tmpDir);
+      if (!fs.existsSync(tmpDir)) {
         throw new Error('Error creating temp-directory "' + tmpDir + '".');
       }
     }
 
     // Create CSS
-    requirejs([ 'less' ], function(Less) {
-      var lessParser = new (Less.Parser)({
-        paths: [ './views/less', './bower_components/bootstrap/less', './bower_components/bootstrap/less/mixins' ], // Specify search paths for @import directives
-        filename: 'photos.less' // Specify a filename, for better error messages
-      });
-
-      // import the bootstrap.less file
-      var tmpCss = Path.join(tmpDir, 'photos.css');
-      lessParser.parse('@import "photos.less";', function(e, tree) {
-        var css = tree.toCSS({
-          compress: true
-        });
-        Fs.writeFile(tmpCss, css, function(err) {
-          if (err) {
-            throw new Error(err);
-          }
-          if (!Fs.existsSync(tmpCss)) {
-            throw new Error('Error creating temp CSS "' + tmpCss + '".');
-          }
-        });
+    requirejs([ 'routes/css' ], function(css) {
+      css.compile(app, function(err, result) {
+        if (err) {
+          throw new Error(err);
+        }
       });
     });
   });
 
   // Initialize config-node
   // @see https://www.npmjs.org/package/config-node
-  var config = Config({
+  var config = config({
     dir: 'config', // where to look for files 
     ext: 'json',
     env: env
@@ -77,6 +62,16 @@ requirejs([ 'express', 'config-node', 'jade' ], function(Express, Config, Jade) 
   // @see http://jade-lang.com/
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+
+  // Internationalization
+  i18n.init({
+    fallbackLng: 'en'
+  });
+  app.use(i18n.handle);
+  i18n.registerAppHelper(app);
+  
+  // Flags
+  app.use('/flags', express.static(__dirname + '/bower_components/flag-icon-css/flags'));
 
   // Add middlewares that are only available in development mode
   if ('development' == env) {
@@ -92,16 +87,21 @@ requirejs([ 'express', 'config-node', 'jade' ], function(Express, Config, Jade) 
     return res.render('index');
   });
 
-  app.use('/photos', Express.static(__dirname + '/photos'));
-  
+  app.get('/about', function(req, res) {
+    return res.render('about');
+  });
+
+  app.use('/photos', express.static(__dirname + '/photos'));
+  app.use('/img', express.static(__dirname + '/views/img'));
+
   // CSS files
-  requirejs([ 'routes/css' ], function(Css) {
-    app.use('/css', Css);
+  requirejs([ 'routes/css' ], function(css) {
+    app.use('/css', css);
   });
 
   // Javascript files
-  requirejs([ 'routes/js' ], function(Js) {
-    app.use('/js', Js);
+  requirejs([ 'routes/js' ], function(js) {
+    app.use('/js', js);
   });
 
   // Start express

@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
   var define = require('amdefine')(module);
 }
 
-define([ 'express', 'path' ], function(Express, Path) {
+define([ 'express', 'path' ], function(express, path) {
 
   /**
    * js-Controller
@@ -10,7 +10,7 @@ define([ 'express', 'path' ], function(Express, Path) {
    * @class Js
    * @constructor 
    */
-  var Js = Express.Router();
+  var Js = express.Router();
 
   /**
    * Contains the path to the javascript-files for production and optional development mode.
@@ -55,9 +55,9 @@ define([ 'express', 'path' ], function(Express, Path) {
     res.set('Content-Type', 'text/javascript');
     if (req.app.get('env') == 'development') {
       var dir = Js.config[js].development ? Js.config[js].development : Js.config[js].production;
-      res.sendFile(Path.join(req.app.get('dir'), dir));
+      res.sendFile(path.join(req.app.get('dir'), dir));
     } else {
-      res.sendFile(Path.join(req.app.get('dir'), Js.config[js].production));
+      res.sendFile(path.join(req.app.get('dir'), Js.config[js].production));
     }
   }
 
