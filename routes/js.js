@@ -34,6 +34,14 @@ define([ 'express', 'path' ], function(express, path) {
     'bootstrap-carousel-swipe': {
       production: 'bower_components/bootstrap-carousel-swipe/carousel-swipe.js'
     },
+    angular: {
+      development: 'bower_components/angular/angular.js',
+      production: 'bower_components/angular/angular.min.js'
+    },
+    moment: {
+      development: 'node_modules/moment/moment.js',
+      production: 'node_modules/moment/min/moment.min.js'
+    },
     app: {
       production: 'app/app.js'
     }
@@ -70,6 +78,14 @@ define([ 'express', 'path' ], function(express, path) {
 
   Js.get('/lib/require.js', function(req, res, next) {
     return Js.render('requirejs', req, res, next);
+  });
+
+  Js.get('/lib/angular.js', function(req, res, next) {
+    return Js.render('angular', req, res, next);
+  });
+
+  Js.get('/lib/moment.js', function(req, res, next) {
+    return Js.render('moment', req, res, next);
   });
 
   Js.get('/lib/bootstrap.js', function(req, res, next) {

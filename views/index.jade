@@ -4,70 +4,68 @@ block content
   div.container.image
     div.carousel.slide#carousel-photos(data-ride="carousel")
       div.carousel-inner
+        div.item
+          img(ng-src="{{photo.url.jpg.prev}}", src=photo.url.jpg.prev)
         div.item.active
-          img(src="/photos/image1.jpg")
+          img#photojpg(ng-src="{{photo.url.jpg.current}}", src=photo.url.jpg.current)
         div.item
-          img(src="/photos/image2.jpg")
-        div.item
-          img(src="/photos/image3.jpg")
-        div.item
-          img(src="/photos/image4.jpg")
-        div.item
-          img(src="/photos/image5.jpg")
-      a.left.carousel-control(href="#carousel-photos", role="button", data-slide="prev")
-      a.right.carousel-control(href="#carousel-photos", role="button", data-slide="next")
-
+          img(ng-src="{{photo.url.jpg.next}}", src=photo.url.jpg.next)
+      a.left.carousel-control(ng-href='#carousel-photos', role="button", data-slide="prev", href=photo.url.html.prev)
+      a.right.carousel-control(ng-href='#carousel-photos', role="button", data-slide="next", href=photo.url.html.next)
   div.container-full.description
     div.container 
       div.row
         div.col-md-8
-          h1 A really long and fancy image title
-            br 
-            small 2014-09-24 17:23:42
-          p Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+          h1
+            p(ng-bind='photo.title')= photo.title
+            small(ng-bind='photo.date')= photo.date
+          p(ng-bind='photo.description')= photo.description
           p 
-            strong Category:&nbsp;
-            a(href="#") Images
+            strong= t('category')
+            | :&nbsp;
+            a(href="#", ng-bind='photo.category')= photo.category
           p
-            strong Tags:&nbsp;
-            a.tag(href="#")
-              span.label.label-default colorful
-            a.tag(href="#")
-              span.label.label-default rectangular
-            a.tag(href="#")
-              span.label.label-default visible
-            a.tag(href="#")
-              span.label.label-default fancy
+            strong= t('tags')
+            | :&nbsp;
+            span(ng-repeat="tag in photo.tags")
+              a.tag(href="#")
+                span.label.label-default(ng-bind="tag")
+            span.ng-hide(ng-hide="photo.tags")
+              each tag in photo.tags
+                a.tag(href="#")
+                  span.label.label-default= tag 
           p
-            strong Shortlink:&nbsp;
-            a(href="#") http://localhost/#
+            strong= t('link')
+            | :&nbsp;
+            a(href=photo.url.html.current, ng-bind="photo.url.html.current", ng-href="{{photo.url.html.current}}")= photo.url.html.current
         div.col-md-4
           div.panel.panel-default
-            div.panel-heading EXIF Data
+            div.panel-heading= t('exif.exif-data')
             div.panel-body
               table.table.table-condensed#exif-table
                 tbody
                   tr
                     td.exif-icon
-                      span.exif.exif-camera(title="Camera")
-                    td Canon EOS 1D Mark III
+                      span.exif.exif-camera(title=t('exif.camera'))
+                    td(ng-bind="photo.camera")= photo.camera
                   tr
-                    td.exif-icon(title="Focal length")
+                    td.exif-icon(title=t('exif.focal-length'))
                       span.exif.exif-focallength
-                    td 300 mm
+                    td(ng-bind='photo.focallength')= photo.focallength
                   tr
-                    td.exif-icon(title="Aperture")
+                    td.exif-icon(title=t('exif.aperture'))
                       span.exif.exif-aperture
-                    td f/8.0
+                    td(ng-bind='photo.aperture')= photo.aperture
                   tr
-                    td.exif-icon(title="Exporuse")
+                    td.exif-icon(title=t('exif.exposure'))
                       span.exif.exif-time
-                    td 1/250s
+                    td(ng-bind='photo.exposure')= photo.exposure
                   tr
-                    td.exif-icon(title="ISO")
+                    td.exif-icon(title=t('exif.iso'))
                       span.exif.exif-film
-                    td 100
+                    td(ng-bind='photo.iso')= photo.iso
                   tr
-                    td.exif-icon(title="Lens")
+                    td.exif-icon(title=t('exif.lens'))
                       span.exif.exif-lens
-                    td Tamron 70-300mm f/4-5.6 Di VC US
+                    td(ng-bind='photo.lens')= photo.lens
+                    

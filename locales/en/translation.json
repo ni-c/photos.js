@@ -5,6 +5,18 @@
   "language": {
     "language": "Language",
     "english": "English",
-    "german": "German"
+    "german": "Deutsch"
+  },
+  "category": "Category",
+  "tags": "Tags",
+  "link": "Link",
+  "exif": {
+    "exif-data": "EXIF Data",
+    "camera": "Camera",
+    "focal-length": "Focal length",
+    "aperture": "Aperture",
+    "exposure": "Exposure",
+    "iso": "ISO",
+    "lens": "Lens"
   }
 }
