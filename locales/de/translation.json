@@ -1,0 +1,22 @@
+{
+  "latest": "Neuestes",
+  "archive": "Archiv",
+  "about": "Impressum",
+  "language": {
+    "language": "Sprache",
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "category": "Kategorie",
+  "tags": "Tags",
+  "link": "Link",
+  "exif": {
+    "exif-data": "EXIF Daten",
+    "camera": "Kamera",
+    "focal-length": "Brennweite",
+    "aperture": "Blende",
+    "exposure": "Belichtungszeit",
+    "iso": "ISO",
+    "lens": "Objektiv"
+  }
+}
