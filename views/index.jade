@@ -1,17 +1,26 @@
 extends layout
 
 block content
+  input#slug(type="hidden", value=photo.slug)
   div.container.image
     div.carousel.slide#carousel-photos(data-ride="carousel")
       div.carousel-inner
-        div.item
-          img(ng-src="{{photo.url.jpg.prev}}", src=photo.url.jpg.prev)
+        if photo.prev
+          div.item
+            img(ng-src="{{photo.prev.src}}", src=photo.prev.src)
         div.item.active
-          img#photojpg(ng-src="{{photo.url.jpg.current}}", src=photo.url.jpg.current)
-        div.item
-          img(ng-src="{{photo.url.jpg.next}}", src=photo.url.jpg.next)
-      a.left.carousel-control(ng-href='#carousel-photos', role="button", data-slide="prev", href=photo.url.html.prev)
-      a.right.carousel-control(ng-href='#carousel-photos', role="button", data-slide="next", href=photo.url.html.next)
+          img#photojpg(ng-src="{{photo.src}}", src=photo.src)
+        if photo.next
+          div.item
+            img(ng-src="{{photo.next.src}}", src=photo.next.src)
+      if photo.previous
+        a.left.carousel-control(ng-href='#carousel-photos', role="button", data-slide="prev", href=photo.previous.href)
+      else
+        a.left.carousel-control(ng-href='#carousel-photos', role="button", data-slide="prev", href="#")
+      if photo.next
+        a.right.carousel-control(ng-href='#carousel-photos', role="button", data-slide="next", href=photo.next.href)
+      else
+        a.right.carousel-control(ng-href='#carousel-photos', role="button", data-slide="next", href="#")
   div.container-full.description
     div.container 
       div.row
@@ -37,7 +46,7 @@ block content
           p
             strong= t('link')
             | :&nbsp;
-            a(href=photo.url.html.current, ng-bind="photo.url.html.current", ng-href="{{photo.url.html.current}}")= photo.url.html.current
+            a(href=photo.href, ng-bind="photo.href", ng-href="{{photo.href}}")= photo.href
         div.col-md-4
           div.panel.panel-default
             div.panel-heading= t('exif.exif-data')
@@ -47,25 +56,25 @@ block content
                   tr
                     td.exif-icon
                       span.exif.exif-camera(title=t('exif.camera'))
-                    td(ng-bind="photo.camera")= photo.camera
+                    td(ng-bind="photo.exif.model")= photo.exif.model
                   tr
                     td.exif-icon(title=t('exif.focal-length'))
                       span.exif.exif-focallength
-                    td(ng-bind='photo.focallength')= photo.focallength
+                    td(ng-bind='photo.exif.focallength')= photo.exif.focallength
                   tr
                     td.exif-icon(title=t('exif.aperture'))
                       span.exif.exif-aperture
-                    td(ng-bind='photo.aperture')= photo.aperture
+                    td(ng-bind='photo.exif.fnumber')= photo.exif.fnumber
                   tr
                     td.exif-icon(title=t('exif.exposure'))
                       span.exif.exif-time
-                    td(ng-bind='photo.exposure')= photo.exposure
+                    td(ng-bind='photo.exif.exposuretime')= photo.exif.exposuretime
                   tr
                     td.exif-icon(title=t('exif.iso'))
                       span.exif.exif-film
-                    td(ng-bind='photo.iso')= photo.iso
-                  tr
-                    td.exif-icon(title=t('exif.lens'))
-                      span.exif.exif-lens
-                    td(ng-bind='photo.lens')= photo.lens
+                    td(ng-bind='photo.exif.iso')= photo.exif.iso
+//                  tr
+//                    td.exif-icon(title=t('exif.lens'))
+//                      span.exif.exif-lens
+//                    td(ng-bind='photo.lens')= photo.lens
                     

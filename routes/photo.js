@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
   var define = require('amdefine')(module);
 }
 
-define([ 'express' ], function(express) {
+define([ 'express', 'moment' ], function(express, moment) {
 
   /**
    * photo-Controller
@@ -26,7 +26,6 @@ define([ 'express' ], function(express) {
    */
   Photo.put = function(grid, filename, aliases, metadata, callback) {
     if (!callback) callback = function() {};
-    console.log('save');
     requirejs( [ 'fs', 'path' ], function(fs, path) {
       fs.readFile(filename,  function(err, data) {
         if (err) callback(err, data);
@@ -55,51 +54,87 @@ define([ 'express' ], function(express) {
    */
   Photo.render = function(req, res, next) {
 
-    // TODO: load photo from database
-    var photo = {
-      title: 'A really long and fancy image title',
-      date: '2012-10-12 12:12',
-      description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-      category: 'Images',
-      tags: [ 'colorful', 'rectangular', 'visible', 'fancy' ],
-      camera: 'Canon EOS 1D Mark III',
-      focallength: '300 mm',
-      aperture: 'f/8.0',
-      exposure: '1/250s',
-      iso: '100',
-      lens: 'Tamron 70-300mm f/4-5.6 Di VC US',
-      url: {
-        jpg: {
-          prev: 'http://localhost:8080/photo/image1.jpg',
-          current: 'http://localhost:8080/photo/image2.jpg',
-          next: 'http://localhost:8080/photo/image3.jpg'
-        },
-        html: {
-          prev: 'http://localhost:8080/photo/image1',
-          current: 'http://localhost:8080/photo/image2',
-          next: 'http://localhost:8080/photo/image3'
-        }
+    req.app.get('db').collection('image.files', function(err, imageFiles) {
+      // TODO Error handling
+      if (err) throw new Error(err);
+      // Helper function to check for file extension
+      function endsWith(str, suffix) {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
       }
-    };
 
-    // Helper function to check for file extension
-    function endsWith(str, suffix) {
-      return str.indexOf(suffix, str.length - suffix.length) !== -1;
-    }
+      // For jpg go to static route
+      if (req.params.file && (endsWith(req.params.file, '.jpg'))) {
+        imageFiles.findOne({filename: req.params.file}, {_id: 1}, function(err, image) {
+          if (err) throw new Error(err);
+          req.app.get('grid').get(image._id, function(err, data) {
+            if (err) throw new Error(err);
+            return res.send(data);
+          });
+        });
+      } else {
 
-    // Render JSON for angularjs
-    if (req.params.file && (endsWith(req.params.file, '.json'))) {
-      return res.json(photo);
-    }
+        var query = null;
+        if (req.params.file && (endsWith(req.params.file, '.json'))) {
+          query = {
+            aliases:  req.params.file.replace('.json', '')
+          }
+        } else if (req.params.file) {
+          query = {
+            aliases:  req.params.file
+          }
+        }
 
-    // For jpg go to static route
-    if (req.params.file && (endsWith(req.params.file, '.jpg'))) {
-      return next();
-    }
+        // Load image from database
+        imageFiles.find(query).sort({'metadata.exif.datetimeoriginal': -1}).limit(1).toArray(function(err, image) {
+          if (err) throw new Error(err);
+          if (image.length == 0) {
+            console.log(query);
+            return res.send(404, '404 - Not found');
+          }
+          imageFiles.find({'metadata.exif.datetimeoriginal': { $gt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1}).sort({'metadata.exif.datetimeoriginal': 1}).limit(1).toArray(function(err, previous) {
+            if (err) throw new Error(err);
+            imageFiles.find({'metadata.exif.datetimeoriginal': { $lt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1}).sort({'metadata.exif.datetimeoriginal': -1}).limit(1).toArray(function(err, next) {
+              if (err) throw new Error(err);
+              if (image.length == 1) {
+                var photo = image[0].metadata;
+                if (previous.length == 1) {
+                  photo.prev = {
+                    src: '/photo/' + previous[0].metadata.slug + '.jpg',
+                    href: previous[0].metadata.slug
+                  } 
+                }
+                if (next.length == 1) {
+                  photo.next = {
+                    src: '/photo/' + next[0].metadata.slug + '.jpg',
+                    href: next[0].metadata.slug
+                  }
+                }
+                
+                photo.src = '/photo/' + image[0].metadata.slug + '.jpg';
+                photo.href = 'http://localhost:8080/' + image[0].metadata.slug;
+                photo.date = moment(image[0].metadata.exif.datetimeoriginal).format('YYYY-MM-DD HH:mm:ss');
+                photo.exif.focallength = photo.exif.focallength.toFixed(1) + ' mm';
+                photo.exif.fnumber = 'ƒ/' + photo.exif.fnumber.toFixed(1);
+                photo.exif.exposuretime = '1/' + 1/photo.exif.exposuretime + ' s';
 
-    // Render HTML page
-    return res.render('index', {
-      photo: photo
+                if (err) throw new Error(err);
+
+                if (req.params.file && (endsWith(req.params.file, '.json'))) {
+                  return res.json(photo);
+                } else {
+                  return res.render('index', {
+                    photo: photo
+                  });
+                }
+
+              } else {
+                res.send(404, '404 - Not found');
+                throw new Error('Image not found');
+              }
+            });
+          });
+        });
+      }
     });
 
   }

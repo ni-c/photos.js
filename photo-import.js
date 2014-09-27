@@ -149,6 +149,7 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
       console.log('tags are comma-separated ("tag1,tag2,tag3")');
       askForMetadata('tags');
 
+      metadata.tags = tags.split(',');
 
       metadata.slug = slug(metadata.title).toLowerCase();
 
@@ -182,15 +183,15 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
         fs.writeFileSync(path.join(__dirname, 'photos', moment(exifData.datetimeoriginal).format('YYYY-MM-DD-HH-mm-ss') + '-' + metadata.slug + '.jpg'), fs.readFileSync(path.resolve(__dirname, filename)));
 
         var resizedFilename = path.join(__dirname, '.tmp', metadata.slug + '.jpg');
-        console.log(resizedFilename);
         gm(filename).resize(1140).write(resizedFilename, function(err) {
-          console.log('bla');
           if (err) throw new Error(err);
           photo.put(grid, resizedFilename, [metadata.slug], metadata, function(err, result) {
             if (err) throw new Error(err);
             process.exit(0);
           });
         });
+      } else {
+        process.exit(0);
       }
     });
 

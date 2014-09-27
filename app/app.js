@@ -23,14 +23,15 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap' ], function($, moment) {
     $(function() {
       // Bootstrap init
       $('.carousel').carousel({
-        interval: false
+        interval: false,
+        wrap: false
       });
     });
   });
 
   var photosApp = angular.module('photosApp', []);
   photosApp.controller('photosCtrl', function($scope, $http) {
-    $http.get('/photo/1.json').success(function(data) {
+    $http.get('/photo/' + $('#slug').val() + '.json').success(function(data) {
       $scope.photo = data;
     });
   });
