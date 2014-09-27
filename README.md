@@ -8,6 +8,10 @@ Photoblog in node.js
 
 Install node.js: [http://nodejs.org](http://nodejs.org/)
 
+### Imagemagick || Graphicsmagick
+
+Install Imagemagick [http://www.imagemagick.org/](http://www.imagemagick.org/) or Graphicsmagick [http://www.graphicsmagick.org/](http://www.graphicsmagick.org/)
+
 ### Bower
 
 Install Bower [http://bower.io](http://bower.io):
@@ -28,6 +32,14 @@ Install node modules:
 
 ```bash
 npm install
+```
+
+## Import JPGs
+
+Import JPGs using the photo-import.js script:
+
+``` bash
+node photo-import photo1.jpg
 ```
 
 ## License
