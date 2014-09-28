@@ -2,11 +2,6 @@
   "latest": "Latest",
   "archive": "Archive",
   "about": "About",
-  "language": {
-    "language": "Language",
-    "english": "English",
-    "german": "Deutsch"
-  },
   "category": "Category",
   "tags": "Tags",
   "link": "Link",

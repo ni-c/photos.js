@@ -27,16 +27,102 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap' ], function($, moment) {
         wrap: false
       });
     });
+
   });
 
   var photosApp = angular.module('photosApp', []);
   photosApp.controller('photosCtrl', function($scope, $http) {
-    $http.get('/photo/' + $('#slug').val() + '.json').success(function(data) {
+
+    var popstate = false;
+
+    // Initialize angularJs
+    $http.get('/photo/' + $('#slug').val() + '.json', { cache: true }).success(function(data) {
       $scope.photo = data;
+      $('tr.exifdata').removeClass('hide');
     });
+
+    // carousel slid-event
+    $('#carousel-photos').on('slid.bs.carousel', function(e) {
+
+      // load data from server
+      var href = $(this).find('.active').attr('data-json');
+      $http.get(href, { cache: true }).success(function(data) {
+        $scope.photo = data;
+
+        if (e.direction == 'left') {
+
+          // Slide to left
+          if ((data.next) && (!$('.item[data-json="' + data.next.href + '.json"]').length)) {
+            // Only push history if the event was not triggered by popstate
+            if (!popstate) {
+              history.replaceState({ json: data.prev.href + '.json', direction: e.direction }, '', data.prev.href);
+            }
+            // Append the new picture to the carousel
+            $('#carousel-photos-inner').append('<div class="item" data-json="' + data.next.href + '.json"><img src="' + data.next.src + '" /></div>');
+          }
+        } else {
+
+          // Slide to right          
+          if ((data.prev) && (!$('.item[data-json="' + data.prev.href + '.json"]').length)) {
+            // Only push history if the event was not triggered by popstate
+            if (!popstate) {
+              history.replaceState({ json: data.next.href + '.json', direction: e.direction }, '', data.next.href);
+            }
+            // Prepend the new picture to the carousel
+            $('#carousel-photos-inner').prepend('<div class="item" data-json="' + data.prev.href + '.json"><img src="' + data.prev.src + '" /></div>');
+          }
+        }
+
+        // Only push history if the event was not triggered by popstate
+        if (!popstate) {
+          history.pushState({ json: data.href + '.json', direction: e.direction }, '', data.href);
+        }
+
+        // Reinitialize carousel
+        $('.carousel').carousel({
+          interval: false,
+          wrap: false
+        });
+
+        // Reset popstate
+        popstate = false;
+      });
+    });
+
+    // Trigger carousel if back button is clicked
+    $(window).on('popstate', function () {
+      popstate = true;
+      var index = $('#carousel-photos .active').index('#carousel-photos .item');
+      var targetIndex = $('#carousel-photos .item[data-json="' +  history.state.json + '"]').index('#carousel-photos .item');
+      if (index > targetIndex) {
+        $('#carousel-photos').carousel('prev');
+      } else {
+        $('#carousel-photos').carousel('next');
+      }
+    });
+
+    $(document).keydown(function(event) {
+      switch (event.keyCode) {
+        // right & k
+        case 39:
+        case 75:
+          event.preventDefault();
+          $('#carousel-photos').carousel('next');
+          break;
+        // left & j
+        case 37:
+        case 74:
+          event.preventDefault();
+          $('#carousel-photos').carousel('prev');
+          break;
+      }
+    });
+
+
   });
   angular.element(document).ready(function() {
     angular.bootstrap(document, [ 'photosApp' ]);
   });
+
 
 });

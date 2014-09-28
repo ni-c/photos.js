@@ -88,36 +88,56 @@ define([ 'express', 'moment' ], function(express, moment) {
         imageFiles.find(query).sort({'metadata.exif.datetimeoriginal': -1}).limit(1).toArray(function(err, image) {
           if (err) throw new Error(err);
           if (image.length == 0) {
-            console.log(query);
             return res.send(404, '404 - Not found');
           }
+          // Load previous image
           imageFiles.find({'metadata.exif.datetimeoriginal': { $gt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1}).sort({'metadata.exif.datetimeoriginal': 1}).limit(1).toArray(function(err, previous) {
             if (err) throw new Error(err);
+            // Load next image
             imageFiles.find({'metadata.exif.datetimeoriginal': { $lt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1}).sort({'metadata.exif.datetimeoriginal': -1}).limit(1).toArray(function(err, next) {
               if (err) throw new Error(err);
+
+              // Set photo properties
               if (image.length == 1) {
                 var photo = image[0].metadata;
                 if (previous.length == 1) {
                   photo.prev = {
-                    src: '/photo/' + previous[0].metadata.slug + '.jpg',
-                    href: previous[0].metadata.slug
+                    src: req.app.locals.baseurl + '/photo/' + previous[0].metadata.slug + '.jpg',
+                    href: req.app.locals.baseurl + '/photo/' + previous[0].metadata.slug
                   } 
                 }
                 if (next.length == 1) {
                   photo.next = {
-                    src: '/photo/' + next[0].metadata.slug + '.jpg',
-                    href: next[0].metadata.slug
+                    src: req.app.locals.baseurl + '/photo/' + next[0].metadata.slug + '.jpg',
+                    href: req.app.locals.baseurl + '/photo/' + next[0].metadata.slug
                   }
                 }
-                
-                photo.src = '/photo/' + image[0].metadata.slug + '.jpg';
-                photo.href = 'http://localhost:8080/' + image[0].metadata.slug;
+
+                photo.src = req.app.locals.baseurl + '/photo/' + image[0].metadata.slug + '.jpg';
+                photo.href = req.app.locals.baseurl + '/photo/' + image[0].metadata.slug;
                 photo.date = moment(image[0].metadata.exif.datetimeoriginal).format('YYYY-MM-DD HH:mm:ss');
                 photo.exif.focallength = photo.exif.focallength.toFixed(1) + ' mm';
-                photo.exif.fnumber = 'ƒ/' + photo.exif.fnumber.toFixed(1);
-                photo.exif.exposuretime = '1/' + 1/photo.exif.exposuretime + ' s';
+                if (photo.exif.fnumber) {
+                  photo.exif.fnumber = 'ƒ/' + photo.exif.fnumber.toFixed(1);
+                }
+                if (photo.exif.exposuretime < 1) {
+                  photo.exif.exposuretime = '1/' + 1/photo.exif.exposuretime;
+                }
+                photo.exif.exposuretime = photo.exif.exposuretime + ' s';
 
-                if (err) throw new Error(err);
+                var tagList = [];
+                photo.tags.forEach(function(tag) {
+                  tagList.push({
+                    url: req.app.locals.baseurl + '/archive/tag/' + tag,
+                    name: tag
+                  });
+                });
+                photo.tags = tagList;
+
+                photo.category = {
+                  url: req.app.locals.baseurl + '/archive/category/' + photo.category.toLowerCase(),
+                  name: photo.category
+                };
 
                 if (req.params.file && (endsWith(req.params.file, '.json'))) {
                   return res.json(photo);

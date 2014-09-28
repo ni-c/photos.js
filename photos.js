@@ -72,10 +72,14 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
 
     // Internationalization
     i18n.init({
-      fallbackLng: 'en-US'
+      lng: 'de-DE',
+      fallbackLng: 'de-DE',
+      useCookie: false,
+      detectLngFromHeaders: false
     });
     app.use(i18n.handle);
     i18n.registerAppHelper(app);
+    app.set('i18n', i18n);
 
     // Flags
     app.use('/flags', express.static(__dirname + '/bower_components/flag-icon-css/flags'));
@@ -94,6 +98,11 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
     requirejs([ 'routes/photo' ], function(photo) {
       app.get('/', photo.render);
       app.get('/photo/:file', photo.render);
+    });
+
+    app.all('*', function(req, res, next) {
+      app.locals.baseurl = req.protocol + '://' + req.headers.host;
+      next();
     });
 
     // About route

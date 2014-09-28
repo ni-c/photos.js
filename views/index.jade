@@ -4,23 +4,23 @@ block content
   input#slug(type="hidden", value=photo.slug)
   div.container.image
     div.carousel.slide#carousel-photos(data-ride="carousel")
-      div.carousel-inner
+      div.carousel-inner#carousel-photos-inner
         if photo.prev
-          div.item
-            img(ng-src="{{photo.prev.src}}", src=photo.prev.src)
-        div.item.active
-          img#photojpg(ng-src="{{photo.src}}", src=photo.src)
+          div.item(data-json="#{photo.prev.href}.json")
+            img(src=photo.prev.src)
+        div.item.active(data-json="#{photo.href}.json")
+          img#photojpg(src=photo.src)
         if photo.next
-          div.item
-            img(ng-src="{{photo.next.src}}", src=photo.next.src)
-      if photo.previous
-        a.left.carousel-control(ng-href='#carousel-photos', role="button", data-slide="prev", href=photo.previous.href)
+          div.item(data-json="#{photo.next.href}.json")
+            img(src=photo.next.src)
+      if photo.prev
+        a.left.carousel-control#prev-link(ng-href='#carousel-photos', role="button", data-slide="prev", href=photo.prev.href)
       else
-        a.left.carousel-control(ng-href='#carousel-photos', role="button", data-slide="prev", href="#")
+        a.left.carousel-control#prev-link(ng-href='#carousel-photos', role="button", data-slide="prev", href="#")
       if photo.next
-        a.right.carousel-control(ng-href='#carousel-photos', role="button", data-slide="next", href=photo.next.href)
+        a.right.carousel-control#next-link(ng-href='#carousel-photos', role="button", data-slide="next", href=photo.next.href)
       else
-        a.right.carousel-control(ng-href='#carousel-photos', role="button", data-slide="next", href="#")
+        a.right.carousel-control#next-link(ng-href='#carousel-photos', role="button", data-slide="next", href="#")
   div.container-full.description
     div.container 
       div.row
@@ -32,17 +32,17 @@ block content
           p 
             strong= t('category')
             | :&nbsp;
-            a(href="#", ng-bind='photo.category')= photo.category
+            a(href=photo.category.url, ng-href="{{photo.category.url}}", ng-bind='photo.category.name')= photo.category.name
           p
             strong= t('tags')
             | :&nbsp;
             span(ng-repeat="tag in photo.tags")
-              a.tag(href="#")
-                span.label.label-default(ng-bind="tag")
+              a.tag(href="{{tag.url}}")
+                span.label.label-default(ng-bind="tag.name")
             span.ng-hide(ng-hide="photo.tags")
               each tag in photo.tags
-                a.tag(href="#")
-                  span.label.label-default= tag 
+                a.tag(href="tag.url")
+                  span.label.label-default= tag.name
           p
             strong= t('link')
             | :&nbsp;
@@ -53,27 +53,27 @@ block content
             div.panel-body
               table.table.table-condensed#exif-table
                 tbody
-                  tr
+                  tr.exifdata(ng-show="photo.exif.model", class=(!photo.exif.model ? "hide" : ""))
                     td.exif-icon
                       span.exif.exif-camera(title=t('exif.camera'))
                     td(ng-bind="photo.exif.model")= photo.exif.model
-                  tr
+                  tr.exifdata(ng-show="photo.exif.focallength", class=(!photo.exif.focallength ? "hide" : ""))
                     td.exif-icon(title=t('exif.focal-length'))
                       span.exif.exif-focallength
                     td(ng-bind='photo.exif.focallength')= photo.exif.focallength
-                  tr
+                  tr.exifdata(ng-show="photo.exif.fnumber", class=(!photo.exif.fnumber ? "hide" : ""))
                     td.exif-icon(title=t('exif.aperture'))
                       span.exif.exif-aperture
                     td(ng-bind='photo.exif.fnumber')= photo.exif.fnumber
-                  tr
+                  tr.exifdata(ng-show="photo.exif.exposuretime", class=(!photo.exif.exposuretime ? "hide" : ""))
                     td.exif-icon(title=t('exif.exposure'))
                       span.exif.exif-time
                     td(ng-bind='photo.exif.exposuretime')= photo.exif.exposuretime
-                  tr
+                  tr.exifdata(ng-show="photo.exif.iso", class=(!photo.exif.iso ? "hide" : ""))
                     td.exif-icon(title=t('exif.iso'))
                       span.exif.exif-film
                     td(ng-bind='photo.exif.iso')= photo.exif.iso
-//                  tr
+//                  tr.exifdata
 //                    td.exif-icon(title=t('exif.lens'))
 //                      span.exif.exif-lens
 //                    td(ng-bind='photo.lens')= photo.lens

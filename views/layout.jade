@@ -2,8 +2,8 @@ doctype html
 html
   head
     title photos.js
-    link(rel='stylesheet', href='/css/photos.css')
-    script(data-main='/js/app', src='/js/lib/require.js')
+    link(rel='stylesheet', href='#{baseurl}/css/photos.css')
+    script(data-main='#{baseurl}/js/app', src='#{baseurl}/js/lib/require.js')
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
   body(ng-controller='photosCtrl')
     div.navbar.navbar-inverse.navbar-static-top(role="navigation")
@@ -14,21 +14,11 @@ html
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href="/") photos.js
+          a.navbar-brand(href="#{baseurl}") photos.js
         div.collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-right
             li
-              a(href="#archive")= t('archive')
+              a(href="#{baseurl}/archive")= t('archive')
             li
-              a(href="/about")= t('about')
-            li(class="dropdown")
-              a.dropdown-toggle(data-toggle="dropdown", href="#")
-                span.flag-icon.flag-icon-gb.hidden-xs
-                span.visible-xs-inline= t('language.language')
-                span.caret
-              ul.dropdown-menu(role="menu")
-                li
-                  a(href="#")
-                    span.flag-icon.flag-icon-de
-                    span.language= t('language.german')
+              a(href="#{baseurl}/about")= t('about')
     block content
