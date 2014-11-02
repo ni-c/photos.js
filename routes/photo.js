@@ -88,7 +88,7 @@ define([ 'express', 'moment' ], function(express, moment) {
         imageFiles.find(query).sort({'metadata.exif.datetimeoriginal': -1}).limit(1).toArray(function(err, image) {
           if (err) throw new Error(err);
           if (image.length == 0) {
-            return res.send(404, '404 - Not found');
+            return res.status(404).send('404 - Not found');
           }
           // Load previous image
           imageFiles.find({'metadata.exif.datetimeoriginal': { $gt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1}).sort({'metadata.exif.datetimeoriginal': 1}).limit(1).toArray(function(err, previous) {

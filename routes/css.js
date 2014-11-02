@@ -32,18 +32,22 @@ define([ 'express' ], function(Express) {
       // import the bootstrap.less file
       var tmpCss = path.join(app.get('tmpDir'), 'photos.css');
       lessParser.parse('@import "photos.less";', function(e, tree) {
-        var css = tree.toCSS({
-          compress: true
-        });
-        fs.writeFile(tmpCss, css, function(err) {
-          if (err) {
-            return callback(err, css);
-          }
-          if (!fs.existsSync(tmpCss)) {
-            return callback('Error creating temp CSS "' + tmpCss + '".', css);
-          }
-          return callback(null, css);
-        });
+        if (e) {
+          return callback(e, '');
+        } else {
+          var css = tree.toCSS({
+            compress: true
+          });
+          fs.writeFile(tmpCss, css, function(err) {
+            if (err) {
+              return callback(err, css);
+            }
+            if (!fs.existsSync(tmpCss)) {
+              return callback('Error creating temp CSS "' + tmpCss + '".', css);
+            }
+            return callback(null, css);
+          });
+        }
       });
     });
   }
