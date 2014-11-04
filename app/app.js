@@ -11,12 +11,13 @@ require.config({
     bootstrap: 'bootstrap',
     angular: 'angular',
     moment: 'moment',
-    'bootstrap-carousel-swipe': 'bootstrap-carousel-swipe'
+    'bootstrap-carousel-swipe': 'bootstrap-carousel-swipe',
+    Openlayers: 'openlayers'
   }
 });
 
 // Application
-require([ 'jquery', 'moment', 'angular', 'bootstrap' ], function($, moment) {
+require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($, moment) {
 
   require([ 'bootstrap-carousel-swipe' ], function() {
     // DOM ready
@@ -35,10 +36,34 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap' ], function($, moment) {
 
     var popstate = false;
 
+    function initMap(coordinates) {
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            title: "Location",
+            source: new ol.source.TileWMS({
+              url: 'http://maps.opengeo.org/geowebcache/service/wms',
+              params: {LAYERS: 'openstreetmap', VERSION: '1.1.1'}
+            })
+          })
+        ],
+        view: new ol.View({
+          projection: 'EPSG:4326',
+          center: coordinates,
+          zoom: 12
+        })
+      });      
+    };
+
     // Initialize angularJs
-    $http.get('/photo/' + $('#slug').val() + '.json', { cache: true }).success(function(data) {
+    $http.get(baseurl + '/photo/' + $('#slug').val() + '.json', { cache: true }).success(function(data) {
       $scope.photo = data;
       $('tr.exifdata').removeClass('hide');
+
+      if (data.exif.gps) {
+        initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
+      } 
     });
 
     // carousel slid-event
@@ -84,6 +109,11 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap' ], function($, moment) {
           wrap: false
         });
 
+        $('#map').empty();
+        if (data.exif.gps) {
+          initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
+        }
+
         // Reset popstate
         popstate = false;
       });
@@ -118,6 +148,8 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap' ], function($, moment) {
       }
     });
 
+    // Openlayers CSS
+    $('head').append('<link rel="stylesheet" href="' + baseurl + '/css/ol.css" type="text/css" />');
 
   });
   angular.element(document).ready(function() {

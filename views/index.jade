@@ -73,8 +73,10 @@ block content
                     td.exif-icon(title=t('exif.iso'))
                       span.exif.exif-film
                     td(ng-bind='photo.exif.iso')= photo.exif.iso
-//                  tr.exifdata
-//                    td.exif-icon(title=t('exif.lens'))
-//                      span.exif.exif-lens
-//                    td(ng-bind='photo.lens')= photo.lens
-                    
+                  tr.exifdata(ng-show="photo.lens", class=(!photo.lens ? "hide" : ""))
+                    td.exif-icon(title=t('exif.lens'))
+                      span.exif.exif-lens
+                    td(ng-bind='photo.lens')= photo.lens
+      div.row
+        div.col-md-12
+          div#map

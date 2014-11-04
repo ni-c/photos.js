@@ -92,6 +92,20 @@ define([ 'express' ], function(Express) {
     }
   });
 
+  /**
+   * Gets the ol.css file of ol3-unofficial
+   * 
+   * @param {Object} req The request
+   * @param {Object} res The response
+   * @param {Object} next The next route
+   */
+  Css.get('/ol.css', function(req, res, next) {
+    requirejs([ 'path' ], function(path) {
+      console.log(path.join(req.app.get('dir'), 'bower_components', 'ol3-unofficial' , 'ol.css'));
+      res.sendFile(path.join(req.app.get('dir'), 'bower_components', 'ol3-unofficial' , 'ol.css'));
+    });
+  });
+
   var exports = Css;
 
   return exports;

@@ -4,6 +4,8 @@ html
     title photos.js
     link(rel='stylesheet', href='#{baseurl}/css/photos.css')
     script(data-main='#{baseurl}/js/app', src='#{baseurl}/js/lib/require.js')
+    script.
+      var baseurl = "#{baseurl}";
     meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
   - if (ngController) 
     body(ng-controller='#{ngController}')

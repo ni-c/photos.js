@@ -19,6 +19,8 @@
     "bootstrap-carousel-swipe": "*",
     "bootstrap": "~3.2.0",
     "flag-icon-css": "~0.6.3",
+    "ol3-unofficial": "~3.0.3",
+    "openlayers": "https://github.com/openlayers/ol3/archive/v3.1.0-pre.2.zip",
     "requirejs": "~2.1.15"
   }
 }

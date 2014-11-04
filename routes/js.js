@@ -42,6 +42,14 @@ define([ 'express', 'path' ], function(express, path) {
       development: 'node_modules/moment/moment.js',
       production: 'node_modules/moment/min/moment.min.js'
     },
+    moment: {
+      development: 'node_modules/moment/moment.js',
+      production: 'node_modules/moment/min/moment.min.js'
+    },
+    openlayers: {
+      development: 'bower_components/ol3-unofficial/ol-debug.js',
+      production: 'bower_components/ol3-unofficial/ol.js'
+    },
     app: {
       production: 'app/app.js'
     }
@@ -94,6 +102,10 @@ define([ 'express', 'path' ], function(express, path) {
 
   Js.get('/lib/bootstrap-carousel-swipe.js', function(req, res, next) {
     return Js.render('bootstrap-carousel-swipe', req, res, next);
+  });
+
+  Js.get('/lib/openlayers.js', function(req, res, next) {
+    return Js.render('openlayers', req, res, next);
   });
 
   Js.get('/app.js', function(req, res, next) {

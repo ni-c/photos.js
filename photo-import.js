@@ -89,12 +89,12 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
           latitude:{
             ref: parse(result.gps.GPSLatitudeRef),
             degrees: result.gps.GPSLatitude,
-            decimal: gpsformat(result.gps.GPSLatitude[2], result.gps.GPSLatitude[1], result.gps.GPSLatitude[0])
+            decimal: gpsformat(result.gps.GPSLatitude[0], result.gps.GPSLatitude[1], result.gps.GPSLatitude[2])
           },
           longitude: {
             ref: parse(result.gps.GPSLongitudeRef),
             degrees: result.gps.GPSLongitude,
-            decimal: gpsformat(result.gps.GPSLongitude[2], result.gps.GPSLongitude[1], result.gps.GPSLongitude[0])
+            decimal: gpsformat(result.gps.GPSLongitude[0], result.gps.GPSLongitude[1], result.gps.GPSLongitude[2])
           }
         }
       }
