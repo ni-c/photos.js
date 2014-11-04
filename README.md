@@ -2,7 +2,7 @@
 
 Photoblog in node.js
 
-![Screenshot](https://ni-c.github.com/photos.js/screen.png)
+![Screenshot](https://raw.githubusercontent.com/ni-c/photos.js/master/screen.png)
 
 ## Features
 
