@@ -65,6 +65,10 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
 
     app.set('db', result.db);
     app.set('grid', result.grid);
+
+    app.set('package', require('./package.json'));
+    app.set('bower', require('./bower.json'));
+    
     // Initialize jade
     // @see http://jade-lang.com/
     app.set('views', __dirname + '/views');
@@ -94,36 +98,65 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       });
     }
 
-    // Photo routes
-    requirejs([ 'routes/photo' ], function(photo) {
+    requirejs([ 'routes/photo', 'routes/css', 'routes/js', 'routes/static' ], function(photo,css, js, stat) {
+    
+      // Photo routes
       app.get('/', photo.render);
       app.get('/photo/:file', photo.render);
-    });
 
-    app.all('*', function(req, res, next) {
-      app.locals.baseurl = req.protocol + '://' + req.headers.host;
-      next();
-    });
-
-    // About route
-    app.get('/about', function(req, res) {
-      return res.render('about');
-    });
-
-    // Static routes
-    app.use('/photo', express.static(__dirname + '/photos'));
-    app.use('/img', express.static(__dirname + '/views/img'));
-
-    // CSS files
-    requirejs([ 'routes/css' ], function(css) {
+      // Set locals
+      app.all('*', function(req, res, next) {
+        app.locals.baseurl = req.protocol + '://' + req.headers.host;
+        next();
+      });
+      
+      // Static routes
+      app.use('/photo', express.static(__dirname + '/photos'));
+      app.use('/img', express.static(__dirname + '/views/img'));
+      
+      // CSS files
       app.use('/css', css);
-    });
 
-    // Javascript files
-    requirejs([ 'routes/js' ], function(js) {
+      // Javascript files
       app.use('/js', js);
-    });
+      
+      // Static pages
+      app.get('/about', stat.about);
 
+      // Not found
+      app.use('*', function(req, res, next) {
+        res.status(404);
+
+        // Helper function to check for file extension
+        function endsWith(str, suffix) {
+          return str.indexOf(suffix, str.length - suffix.length) !== -1;
+        }
+
+        if (req.baseUrl && (endsWith(req.baseUrl, '.jpg'))) {
+          res.send('404 Not Found');
+        } else if (req.baseUrl && (endsWith(req.baseUrl, '.json'))) {
+          res.json({
+            status: 404,
+            description: 'Not Found'
+          });
+        } else {
+          res.render('error/404');
+      }
+      });
+      
+      // Errorhandler
+      app.use(function(err, req, res, next) {
+        var data = {};
+        if ('development' == env) {
+          console.error(err.stack);
+          data.err = err.stack;
+        }
+        res.status(500);
+        res.render('error/500', data);
+      });
+
+    });
+    
     // Start express
     app.listen(config.port || 8080);
     console.log('\u001b[32mphotos.js listening on port \u001b[33m%d\033[0m', config.port || 8080);

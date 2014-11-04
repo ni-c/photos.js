@@ -13,7 +13,7 @@ define([ 'express', 'moment' ], function(express, moment) {
   var Photo = function() {}
 
   /**
-   * Renders the given javascript file
+   * Put the given photo into the gridfs database
    * 
    * @method render
    * @param {Object} grid The gridfs object
@@ -35,7 +35,6 @@ define([ 'express', 'moment' ], function(express, moment) {
           aliases: aliases,
           content_type: 'application/jgp' 
         }, function (err, result) {
-          console.log(result);
           if (err) callback(err, result);
           return callback(null, result);
         });
@@ -143,12 +142,13 @@ define([ 'express', 'moment' ], function(express, moment) {
                   return res.json(photo);
                 } else {
                   return res.render('index', {
-                    photo: photo
+                    photo: photo,
+                    ngController: 'photosCtrl'
                   });
                 }
 
               } else {
-                res.send(404, '404 - Not found');
+                res.status(404).send('404 - Not found');
                 throw new Error('Image not found');
               }
             });

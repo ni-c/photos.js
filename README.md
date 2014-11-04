@@ -2,6 +2,26 @@
 
 Photoblog in node.js
 
+![Screenshot](https://ni-c.github.com/photos.js/screen.png)
+
+## Features
+
+### Frontend
+
+- Responsive Design
+- Single-page application using AngularJS
+- …that also works without Javascript
+- Touch enabled
+- Scalable vector icons
+
+### Backend
+
+- node.js with Express Framework
+- Less and Jade
+- Metadata and photos stored in MongoDB with GridFS
+- Automatic photo resizing and EXIF parsing
+- I18n
+
 ## Installation
 
 ### node.js
@@ -38,9 +58,15 @@ npm install
 
 Import JPGs using the photo-import.js script:
 
-``` bash
+```bash
 node photo-import photo1.jpg
 ```
+
+## Run
+
+````bash
+node photos.js
+````
 
 ## License
 

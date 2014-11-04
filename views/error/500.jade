@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  div.container.about
+    h1 Internal Server Error
+    p
+      | Something went very wrong. Very very wrong. Sorry.
+    - if (err)
+      p
+        pre!= err
