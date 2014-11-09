@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  div.container.archive
+
+    div.row
+      div.col-md-4
+        div.panel.panel-default
+          div.panel-heading= t('categories')
+          div.panel-body
+            span
+              each category in categories
+                a.tag()
+                a.category(href=activeCategory==category.slug?'#{baseurl}/archive':category.url)
+                  span.label(class=activeCategory==category.slug?'label-danger':'label-default') #{category.label}
+                | 
+      div.col-md-8
+        div.panel.panel-default
+          div.panel-heading= t('tags')
+          div.panel-body
+            span
+              each tag in tags
+                a.tag(href=activeTag==tag.slug?'#{baseurl}/archive':tag.url)
+                  span.label(class=activeTag==tag.slug?'label-danger':'label-default') #{tag.label}
+                | 
+    div.row.thumbnails
+      each thumbnail in thumbnails
+        div.col-lg-2.col-md-3.col-sm-3.col-xs-4
+          div.thumbnail
+            a(href="#{thumbnail.url}")
+              img(src="#{thumbnail.base64}")

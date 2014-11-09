@@ -98,18 +98,23 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       });
     }
 
-    requirejs([ 'routes/photo', 'routes/css', 'routes/js', 'routes/static' ], function(photo,css, js, stat) {
-    
-      // Photo routes
-      app.get('/', photo.render);
-      app.get('/photo/:file', photo.render);
+    requirejs([ 'routes/photo', 'routes/css', 'routes/js', 'routes/static', 'routes/archive' ], function(photo,css, js, stat, archive) {
 
       // Set locals
       app.all('*', function(req, res, next) {
         app.locals.baseurl = req.protocol + '://' + req.headers.host;
+        app.locals.breadcrumbs = [];
         next();
       });
+    
+      // Photo routes
+      app.get('/', photo.render);
+      app.get('/photo/:file', photo.render);
       
+      app.get('/archive', archive.render)
+      app.get('/archive/category/:category', archive.render)
+      app.get('/archive/tag/:tag', archive.render)
+
       // Static routes
       app.use('/photo', express.static(__dirname + '/photos'));
       app.use('/img', express.static(__dirname + '/views/img'));

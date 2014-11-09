@@ -37,23 +37,49 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
     var popstate = false;
 
     function initMap(coordinates) {
+
+      var iconFeature = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857'))
+      });
+
+      var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+          anchor: [0.5, 105],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          opacity: 0.75,
+          scale: 0.3,
+          src: '../img/mapmarker.svg'
+        }))
+      });
+
+      iconFeature.setStyle(iconStyle);
+
+      var vectorSource = new ol.source.Vector({
+        features: [iconFeature]
+      });
+
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+      });
+
+      var view = new ol.View({
+        center: ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857'),
+        zoom: 10
+      });
+
       var map = new ol.Map({
-        target: 'map',
         layers: [
           new ol.layer.Tile({
-            title: "Location",
-            source: new ol.source.TileWMS({
-              url: 'http://maps.opengeo.org/geowebcache/service/wms',
-              params: {LAYERS: 'openstreetmap', VERSION: '1.1.1'}
-            })
-          })
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
         ],
-        view: new ol.View({
-          projection: 'EPSG:4326',
-          center: coordinates,
-          zoom: 12
-        })
-      });      
+        target: 'map',
+        controls: ol.control.defaults({
+        }),
+        view: view
+      });
     };
 
     // Initialize angularJs

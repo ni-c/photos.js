@@ -127,6 +127,9 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
           if (exifData[prop] == null) {
             exifData[prop] = rl.question(prop + ': ');
             console.log('');
+            if (prop == 'fnumber') {
+              exifData[prop] = parseFloat(exifData[prop]);
+            }
           }
         }
       }
@@ -148,10 +151,23 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
       askForMetadata('category');
       console.log('tags are comma-separated ("tag1,tag2,tag3")');
       askForMetadata('tags');
-
-      metadata.tags = tags.split(',');
+      metadata.tags = metadata.tags.split(',');
 
       metadata.slug = slug(metadata.title).toLowerCase();
+
+      metadata.category = {
+        label: metadata.category,
+        slug: slug(metadata.category).toLowerCase()
+      };
+
+      temp = [];
+      metadata.tags.forEach(function(tag) {
+        temp.push({
+          label: tag,
+          slug: slug(tag).toLowerCase()
+        });
+      });
+      metadata.tags = temp;
 
       metadata.exif = exifData;
       console.log('');
@@ -183,13 +199,28 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
         fs.writeFileSync(path.join(__dirname, 'photos', moment(exifData.datetimeoriginal).format('YYYY-MM-DD-HH-mm-ss') + '-' + metadata.slug + '.jpg'), fs.readFileSync(path.resolve(__dirname, filename)));
 
         var resizedFilename = path.join(__dirname, '.tmp', metadata.slug + '.jpg');
+        var thumbFilename = path.join(__dirname, '.tmp', metadata.slug + '.thumb.jpg');
         gm(filename).resize(1140).write(resizedFilename, function(err) {
           if (err) throw new Error(err);
-          photo.put(grid, resizedFilename, [metadata.slug], metadata, function(err, result) {
+          gm(filename).resize(200).write(thumbFilename, function(err) {
             if (err) throw new Error(err);
-            process.exit(0);
+            fs.readFile(resizedFilename,  function(err, imagedata) {
+              fs.readFile(thumbFilename,  function(err, thumbdata) {
+                if (err) throw new Error(err);
+                metadata.thumbnail = thumbdata.toString('base64');
+                grid.put(imagedata, {
+                  filename: path.basename(resizedFilename), 
+                  metadata: metadata, 
+                  aliases: [metadata.slug],
+                  content_type: 'application/jgp' 
+                }, function (err, result) {
+                  process.exit(0);
+                });
+              });
+            });
           });
         });
+
       } else {
         process.exit(0);
       }

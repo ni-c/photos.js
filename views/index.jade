@@ -32,17 +32,17 @@ block content
           p 
             strong= t('category')
             | :&nbsp;
-            a(href=photo.category.url, ng-href="{{photo.category.url}}", ng-bind='photo.category.name')= photo.category.name
+            a(href=photo.category.url, ng-href="{{photo.category.url}}", ng-bind='photo.category.label')= photo.category.label
           p
             strong= t('tags')
             | :&nbsp;
             span(ng-repeat="tag in photo.tags")
               a.tag(href="{{tag.url}}")
-                span.label.label-default(ng-bind="tag.name")
+                span.label.label-default(ng-bind="tag.label")
             span.ng-hide(ng-hide="photo.tags")
               each tag in photo.tags
                 a.tag(href="tag.url")
-                  span.label.label-default= tag.name
+                  span.label.label-default= tag.label
           p
             strong= t('link')
             | :&nbsp;

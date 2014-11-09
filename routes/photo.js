@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
   var define = require('amdefine')(module);
 }
 
-define([ 'express', 'moment' ], function(express, moment) {
+define([ 'moment' ], function(moment) {
 
   /**
    * photo-Controller
@@ -11,36 +11,6 @@ define([ 'express', 'moment' ], function(express, moment) {
    * @constructor 
    */
   var Photo = function() {}
-
-  /**
-   * Put the given photo into the gridfs database
-   * 
-   * @method render
-   * @param {Object} grid The gridfs object
-   * @param {String} filename The filename of the image
-   * @param {String} aliases An array of aliases for the image
-   * @param {Object} metadata The metadata to save with the image
-   * @param {Function} callback The callback method to execute after rendering
-   * @param {String} callback.err null if no error occured, otherwise the error
-   * @param {String} callback.result The rendered CSS string
-   */
-  Photo.put = function(grid, filename, aliases, metadata, callback) {
-    if (!callback) callback = function() {};
-    requirejs( [ 'fs', 'path' ], function(fs, path) {
-      fs.readFile(filename,  function(err, data) {
-        if (err) callback(err, data);
-        grid.put(data, { 
-          filename: path.basename(filename), 
-          metadata: metadata, 
-          aliases: aliases,
-          content_type: 'application/jgp' 
-        }, function (err, result) {
-          if (err) callback(err, result);
-          return callback(null, result);
-        });
-      });
-    });
-  }
 
   /**
    * Renders the given javascript file
@@ -87,7 +57,7 @@ define([ 'express', 'moment' ], function(express, moment) {
         imageFiles.find(query).sort({'metadata.exif.datetimeoriginal': -1}).limit(1).toArray(function(err, image) {
           if (err) throw new Error(err);
           if (image.length == 0) {
-            return res.status(404).send('404 - Not found');
+            return next();
           }
           // Load previous image
           imageFiles.find({'metadata.exif.datetimeoriginal': { $gt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1}).sort({'metadata.exif.datetimeoriginal': 1}).limit(1).toArray(function(err, previous) {
@@ -120,22 +90,22 @@ define([ 'express', 'moment' ], function(express, moment) {
                   photo.exif.fnumber = 'ƒ/' + photo.exif.fnumber.toFixed(1);
                 }
                 if (photo.exif.exposuretime < 1) {
-                  photo.exif.exposuretime = '1/' + 1/photo.exif.exposuretime;
+                  photo.exif.exposuretime = '1/' + Math.round(1/photo.exif.exposuretime);
                 }
                 photo.exif.exposuretime = photo.exif.exposuretime + ' s';
 
                 var tagList = [];
                 photo.tags.forEach(function(tag) {
                   tagList.push({
-                    url: req.app.locals.baseurl + '/archive/tag/' + tag,
-                    name: tag
+                    url: req.app.locals.baseurl + '/archive/tag/' + tag.slug,
+                    label: tag.label
                   });
                 });
                 photo.tags = tagList;
 
                 photo.category = {
-                  url: req.app.locals.baseurl + '/archive/category/' + photo.category.toLowerCase(),
-                  name: photo.category
+                  url: req.app.locals.baseurl + '/archive/category/' + photo.category.slug,
+                  label: photo.category.label
                 };
 
                 if (req.params.file && (endsWith(req.params.file, '.json'))) {
@@ -148,8 +118,7 @@ define([ 'express', 'moment' ], function(express, moment) {
                 }
 
               } else {
-                res.status(404).send('404 - Not found');
-                throw new Error('Image not found');
+                return next();
               }
             });
           });
