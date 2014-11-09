@@ -36,15 +36,15 @@ block content
           p
             strong= t('tags')
             | :&nbsp;
-            span(ng-repeat="tag in photo.tags")
-              a.tag(href="{{tag.url}}")
+            span
+              a.tag(ng-repeat="tag in photo.tags", href="{{tag.url}}")
                 span.label.label-default(ng-bind="tag.label")
             span.ng-hide(ng-hide="photo.tags")
               each tag in photo.tags
                 a.tag(href="tag.url")
                   span.label.label-default= tag.label
                 | 
-          p
+          p.hidden-xs
             strong= t('link')
             | :&nbsp;
             a(href=photo.href, ng-bind="photo.href", ng-href="{{photo.href}}")= photo.href

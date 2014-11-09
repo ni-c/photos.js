@@ -10,7 +10,6 @@ block content
           div.panel-body
             span
               each category in categories
-                a.tag()
                 a.category(href=activeCategory==category.slug?'#{baseurl}/archive':category.url)
                   span.label(class=activeCategory==category.slug?'label-danger':'label-default') #{category.label}
                 | 
