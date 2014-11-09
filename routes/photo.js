@@ -85,14 +85,18 @@ define([ 'moment' ], function(moment) {
                 photo.src = req.app.locals.baseurl + '/photo/' + image[0].metadata.slug + '.jpg';
                 photo.href = req.app.locals.baseurl + '/photo/' + image[0].metadata.slug;
                 photo.date = moment(image[0].metadata.exif.datetimeoriginal).format('YYYY-MM-DD HH:mm:ss');
-                photo.exif.focallength = photo.exif.focallength.toFixed(1) + ' mm';
+                if (photo.exif.focallength) {
+                  photo.exif.focallength = photo.exif.focallength.toFixed(1) + ' mm';
+                }
                 if (photo.exif.fnumber) {
                   photo.exif.fnumber = 'ƒ/' + photo.exif.fnumber.toFixed(1);
                 }
-                if (photo.exif.exposuretime < 1) {
-                  photo.exif.exposuretime = '1/' + Math.round(1/photo.exif.exposuretime);
+                if (photo.exif.exposuretime) {
+                  if (photo.exif.exposuretime < 1) {
+                    photo.exif.exposuretime = '1/' + Math.round(1/photo.exif.exposuretime);
+                  }
+                  photo.exif.exposuretime = photo.exif.exposuretime + ' s';
                 }
-                photo.exif.exposuretime = photo.exif.exposuretime + ' s';
 
                 var tagList = [];
                 photo.tags.forEach(function(tag) {

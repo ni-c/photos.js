@@ -127,7 +127,10 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
           if (exifData[prop] == null) {
             exifData[prop] = rl.question(prop + ': ');
             console.log('');
-            if (prop == 'fnumber') {
+            if (!exifData[prop] || exifData[prop] == '') {
+              delete exifData[prop];
+            }
+            if (exifData[prop] && prop == 'fnumber') {
               exifData[prop] = parseFloat(exifData[prop]);
             }
           }
