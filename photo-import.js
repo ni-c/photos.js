@@ -214,9 +214,9 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
 
         var resizedFilename = path.join(__dirname, '.tmp', metadata.slug + '.jpg');
         var thumbFilename = path.join(__dirname, '.tmp', metadata.slug + '.thumb.jpg');
-        gm(filename).resize(1140,760).write(resizedFilename, function(err) {
+        gm(filename).resize(1140,760,"!").write(resizedFilename, function(err) {
           if (err) throw new Error(err);
-          gm(filename).resize(200,133).write(thumbFilename, function(err) {
+          gm(filename).resize(200,133,"!").write(thumbFilename, function(err) {
             if (err) throw new Error(err);
             fs.readFile(resizedFilename,  function(err, imagedata) {
               fs.readFile(thumbFilename,  function(err, thumbdata) {
