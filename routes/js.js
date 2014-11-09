@@ -25,7 +25,7 @@ define([ 'express', 'path' ], function(express, path) {
       production: 'bower_components/jquery/dist/jquery.min.js'
     },
     jquerymap: {
-      production: 'bower_components/angular/jquery.min.map'
+      production: 'bower_components/jquery/dist/jquery.min.map'
     },
     requirejs: {
       production: 'bower_components/requirejs/require.js'
