@@ -24,6 +24,9 @@ define([ 'express', 'path' ], function(express, path) {
       development: 'bower_components/jquery/dist/jquery.js',
       production: 'bower_components/jquery/dist/jquery.min.js'
     },
+    jquerymap: {
+      production: 'bower_components/angular/jquery.min.map'
+    },
     requirejs: {
       production: 'bower_components/requirejs/require.js'
     },
@@ -37,6 +40,9 @@ define([ 'express', 'path' ], function(express, path) {
     angular: {
       development: 'bower_components/angular/angular.js',
       production: 'bower_components/angular/angular.min.js'
+    },
+    angularmap: {
+      production: 'bower_components/angular/angular.min.js.map'
     },
     moment: {
       development: 'node_modules/moment/moment.js',
@@ -84,12 +90,20 @@ define([ 'express', 'path' ], function(express, path) {
     return Js.render('jquery', req, res, next);
   });
 
+  Js.get('/lib/jquery.min.map', function(req, res, next) {
+    return Js.render('jquerymap', req, res, next);
+  });
+
   Js.get('/lib/require.js', function(req, res, next) {
     return Js.render('requirejs', req, res, next);
   });
 
   Js.get('/lib/angular.js', function(req, res, next) {
     return Js.render('angular', req, res, next);
+  });
+
+  Js.get('/lib/angular.min.js.map', function(req, res, next) {
+    return Js.render('angularmap', req, res, next);
   });
 
   Js.get('/lib/moment.js', function(req, res, next) {
