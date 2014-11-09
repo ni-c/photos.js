@@ -69,6 +69,7 @@ define([ 'moment' ], function(moment) {
               // Set photo properties
               if (image.length == 1) {
                 var photo = image[0].metadata;
+                delete photo.thumbnail;
                 if (previous.length == 1) {
                   photo.prev = {
                     src: req.app.locals.baseurl + '/photo/' + previous[0].metadata.slug + '.jpg',

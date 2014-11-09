@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title photos.js
+    title #{meta.title}
     link(rel='stylesheet', href='#{baseurl}/css/photos.css')
     script(data-main='#{baseurl}/js/app', src='#{baseurl}/js/lib/require.js')
     script.
@@ -19,7 +19,7 @@ html
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href="#{baseurl}") photos.js
+        a.navbar-brand(href="#{baseurl}") #{meta.title}
       div.collapse.navbar-collapse
         - if (breadcrumbs.length > 0) {
           ul.nav.navbar-nav
@@ -34,3 +34,6 @@ html
           li(class=page=='about'?'active':undefined)
             a(href="#{baseurl}/about")= t('about')
   block content
+  footer
+    div.container.footer.text-center
+      p!= meta.footer

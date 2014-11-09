@@ -103,6 +103,7 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       // Set locals
       app.all('*', function(req, res, next) {
         app.locals.baseurl = req.protocol + '://' + req.headers.host;
+        app.locals.meta = req.app.get('config').meta;
         app.locals.breadcrumbs = [];
         next();
       });
