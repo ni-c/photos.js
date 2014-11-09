@@ -146,12 +146,26 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
         console.log('');
       };
 
+      function askForExif(item) {
+        if (exifData[item]) {
+          var answer = rl.question(item + ' [' + exifData[item] + '] : ');
+          if (answer.length > 0) {
+            exifData[item] = answer;
+          }
+        } else {
+          exifData[item] = rl.question(item + ': ');
+        }
+        console.log('');
+      };
+
       askForMetadata('title');
       askForMetadata('description');
       askForMetadata('category');
       console.log('tags are comma-separated ("tag1,tag2,tag3")');
       askForMetadata('tags');
       metadata.tags = metadata.tags.split(',');
+
+      askForExif('lens');
 
       metadata.slug = slug(metadata.title).toLowerCase();
 
@@ -200,9 +214,9 @@ requirejs([ 'fs', 'config-node', 'exif', 'moment', 'readline-sync', 'slug', 'fs'
 
         var resizedFilename = path.join(__dirname, '.tmp', metadata.slug + '.jpg');
         var thumbFilename = path.join(__dirname, '.tmp', metadata.slug + '.thumb.jpg');
-        gm(filename).resize(1140).write(resizedFilename, function(err) {
+        gm(filename).resize(1140,760).write(resizedFilename, function(err) {
           if (err) throw new Error(err);
-          gm(filename).resize(200).write(thumbFilename, function(err) {
+          gm(filename).resize(200,133).write(thumbFilename, function(err) {
             if (err) throw new Error(err);
             fs.readFile(resizedFilename,  function(err, imagedata) {
               fs.readFile(thumbFilename,  function(err, thumbdata) {

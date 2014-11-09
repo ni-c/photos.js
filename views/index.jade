@@ -54,9 +54,13 @@ block content
               table.table.table-condensed#exif-table
                 tbody
                   tr.exifdata(ng-show="photo.exif.model", class=(!photo.exif.model ? "hide" : ""))
-                    td.exif-icon
-                      span.exif.exif-camera(title=t('exif.camera'))
+                    td.exif-icon(title=t('exif.camera'))
+                      span.exif.exif-camera
                     td(ng-bind="photo.exif.model")= photo.exif.model
+                  tr.exifdata(ng-show="photo.exif.lens", class=(!photo.exif.lens ? "hide" : ""))
+                    td.exif-icon(title=t('exif.lens'))
+                      span.exif.exif-lens
+                    td(ng-bind='photo.exif.lens')= photo.exif.lens
                   tr.exifdata(ng-show="photo.exif.focallength", class=(!photo.exif.focallength ? "hide" : ""))
                     td.exif-icon(title=t('exif.focal-length'))
                       span.exif.exif-focallength
@@ -73,10 +77,6 @@ block content
                     td.exif-icon(title=t('exif.iso'))
                       span.exif.exif-film
                     td(ng-bind='photo.exif.iso')= photo.exif.iso
-                  tr.exifdata(ng-show="photo.exif.lens", class=(!photo.exif.lens ? "hide" : ""))
-                    td.exif-icon(title=t('exif.lens'))
-                      span.exif.exif-lens
-                    td(ng-bind='photo.exif.lens')= photo.lens
       div.row
         div.col-md-12
           div#map
