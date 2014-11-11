@@ -98,7 +98,7 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       });
     }
 
-    requirejs([ 'routes/photo', 'routes/css', 'routes/js', 'routes/static', 'routes/archive', 'routes/feed' ], function(photo,css, js, stat, archive, feed) {
+    requirejs([ 'routes/photo', 'routes/css', 'routes/js', 'routes/static', 'routes/archive', 'routes/feed', 'routes/sitemap' ], function(photo,css, js, stat, archive, feed, sitemap) {
 
       // Set locals
       app.all('*', function(req, res, next) {
@@ -122,6 +122,9 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       
       // RSS Feed
       app.get('/feed.rss', feed.render);
+      
+      // Sitemap.xml
+      app.get('/sitemap.xml', sitemap.render);
 
       // CSS files
       app.use('/css', css);
@@ -156,7 +159,7 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       // Errorhandler
       app.use(function(err, req, res, next) {
         var data = {};
-        if ('development' == env) {
+        if ('production' == env) {
           console.error(err.stack);
           data.err = err.stack;
         }
