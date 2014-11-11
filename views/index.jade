@@ -3,7 +3,7 @@ extends layout
 block content
   input#slug(type="hidden", value=photo.slug)
   div.container.image
-    div.carousel.slide#carousel-photos(data-ride="carousel")
+    div.carousel.slide#carousel-photos(data-ride="carousel", data-interval="false")
       div.carousel-inner#carousel-photos-inner
         if photo.prev
           div.item(data-json="#{photo.prev.href}.json")
