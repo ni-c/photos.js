@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /feed.rss
+Disallow: /archive/
+Sitemap: http://localhost:8080/sitemap.xml

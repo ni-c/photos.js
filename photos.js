@@ -14,7 +14,7 @@ requirejs.config({
   nodeRequire: require
 });
 
-requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodbHelper' ], function(express, config, jade, i18n, moment, mongodbHelper) {
+requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'libs/mongodbHelper' ], function(express, config, jade, i18n, moment, path, mongodbHelper) {
 
   // Get environment, to start in production environment use:
   // $ NODE_ENV=production node photos.js
@@ -134,6 +134,9 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       
       // Static pages
       app.get('/about', stat.about);
+
+      // Static files
+      app.use(express.static(path.join(__dirname, 'public')));
 
       // Not found
       app.use('*', function(req, res, next) {
