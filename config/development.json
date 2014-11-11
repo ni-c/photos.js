@@ -9,5 +9,16 @@
   "meta": {
   	"title": "photos.js",
   	"footer": "All photos in photos.js by Willi Thiel are licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US'>Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>."
+  },
+  "feed": {
+    "title": "photos.js",
+    "description": "Photoblog",
+    "copyright": "",
+    "categories": ["Fotos", "Fotoblog"],
+    "feed_url": "http://localhost:8080/feed.rss",
+    "site_url": "http://localhost:8080"
+  },
+  "sitemap": {
+    "site_url": "http://localhost:8080"
   }
 }
