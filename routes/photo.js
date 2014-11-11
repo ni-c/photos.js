@@ -60,10 +60,10 @@ define([ 'moment' ], function(moment) {
             return next();
           }
           // Load previous image
-          imageFiles.find({'metadata.exif.datetimeoriginal': { $gt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1}).sort({'metadata.exif.datetimeoriginal': 1}).limit(1).toArray(function(err, previous) {
+          imageFiles.find({'metadata.exif.datetimeoriginal': { $gt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1, 'metadata.title': 1}).sort({'metadata.exif.datetimeoriginal': 1}).limit(1).toArray(function(err, previous) {
             if (err) throw new Error(err);
             // Load next image
-            imageFiles.find({'metadata.exif.datetimeoriginal': { $lt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1}).sort({'metadata.exif.datetimeoriginal': -1}).limit(1).toArray(function(err, next) {
+            imageFiles.find({'metadata.exif.datetimeoriginal': { $lt: image[0].metadata.exif.datetimeoriginal }}, {'metadata.slug': 1, 'metadata.title': 1}).sort({'metadata.exif.datetimeoriginal': -1}).limit(1).toArray(function(err, next) {
               if (err) throw new Error(err);
 
               // Set photo properties
@@ -71,15 +71,18 @@ define([ 'moment' ], function(moment) {
                 var photo = image[0].metadata;
                 delete photo.thumbnail;
                 if (previous.length == 1) {
+                  console.log(previous[0]);
                   photo.prev = {
                     src: req.app.locals.baseurl + '/photo/' + previous[0].metadata.slug + '.jpg',
-                    href: req.app.locals.baseurl + '/photo/' + previous[0].metadata.slug
+                    href: req.app.locals.baseurl + '/photo/' + previous[0].metadata.slug,
+                    title: previous[0].metadata.title
                   } 
                 }
                 if (next.length == 1) {
                   photo.next = {
                     src: req.app.locals.baseurl + '/photo/' + next[0].metadata.slug + '.jpg',
-                    href: req.app.locals.baseurl + '/photo/' + next[0].metadata.slug
+                    href: req.app.locals.baseurl + '/photo/' + next[0].metadata.slug,
+                    title: next[0].metadata.title
                   }
                 }
 
@@ -116,8 +119,17 @@ define([ 'moment' ], function(moment) {
                 if (req.params.file && (endsWith(req.params.file, '.json'))) {
                   return res.json(photo);
                 } else {
+                  tagList.forEach(function(tag) {
+                    req.app.locals.keywords = req.app.locals.keywords + ',' + tag.label.toLowerCase();
+                  });
+                  var coordinates = undefined;
+                  if (photo.exif.gps) {
+                    coordinates = photo.exif.gps.longitude.decimal + ';' + photo.exif.gps.latitude.decimal
+                  }
                   return res.render('index', {
                     photo: photo,
+                    coordinates: coordinates,
+                    pagetitle: photo.title,
                     ngController: 'photosCtrl'
                   });
                 }

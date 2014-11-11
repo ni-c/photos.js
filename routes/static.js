@@ -31,6 +31,7 @@ define([ 'express' ], function(Express) {
     return res.render('about', {
       packages: packages,
       components: components,
+      pagetitle: 'About',
       page: 'about'
     });
   }; 

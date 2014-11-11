@@ -16,8 +16,11 @@ require.config({
   }
 });
 
+
 // Application
 require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($, moment) {
+
+  var baseurl = $('base').attr('href');
 
   require([ 'bootstrap-carousel-swipe' ], function() {
     // DOM ready
@@ -112,7 +115,7 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
               history.replaceState({ json: data.prev.href + '.json', direction: e.direction }, '', data.prev.href);
             }
             // Append the new picture to the carousel
-            $('#carousel-photos-inner').append('<div class="item" data-json="' + data.next.href + '.json"><img src="' + data.next.src + '" /></div>');
+            $('#carousel-photos-inner').append('<div class="item" data-json="' + data.next.href + '.json"><img src="' + data.next.src + '" alt="' + data.next.title + '" /></div>');
           }
         } else {
 
@@ -123,9 +126,12 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
               history.replaceState({ json: data.next.href + '.json', direction: e.direction }, '', data.next.href);
             }
             // Prepend the new picture to the carousel
-            $('#carousel-photos-inner').prepend('<div class="item" data-json="' + data.prev.href + '.json"><img src="' + data.prev.src + '" /></div>');
+            $('#carousel-photos-inner').prepend('<div class="item" data-json="' + data.prev.href + '.json"><img src="' + data.prev.src + '" alt="' + data.prev.title + '"  /></div>');
           }
         }
+
+        // Set title
+        document.title = data.title + ' | ' + $('meta[name="DC.Title"').attr('content');
 
         // Only push history if the event was not triggered by popstate
         if (!popstate) {
@@ -138,11 +144,12 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
           wrap: false
         });
 
+        // Reinitialize Map
         $('#map').empty();
         $('#map').css('display', 'none');
         if (data.exif.gps) {
-          initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
           $('#map').css('display', '');
+          initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
         }
 
         // Reset popstate

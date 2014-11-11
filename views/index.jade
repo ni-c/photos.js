@@ -7,12 +7,12 @@ block content
       div.carousel-inner#carousel-photos-inner
         if photo.prev
           div.item(data-json="#{photo.prev.href}.json")
-            img(src=photo.prev.src)
+            img(src=photo.prev.src, alt="#{photo.prev.title}")
         div.item.active(data-json="#{photo.href}.json")
-          img#photojpg(src=photo.src)
+          img#photojpg(src=photo.src, alt="#{photo.title}")
         if photo.next
           div.item(data-json="#{photo.next.href}.json")
-            img(src=photo.next.src)
+            img(src=photo.next.src, alt="#{photo.next.title}")
       if photo.prev
         a.left.carousel-control#prev-link(ng-href='#carousel-photos', role="button", data-slide="prev", href=photo.prev.href)
       else
@@ -26,7 +26,7 @@ block content
       div.row
         div.col-md-8
           h1
-            p(ng-bind='photo.title')= photo.title
+            span.title(ng-bind='photo.title')= photo.title
             small(ng-bind='photo.date')= photo.date
           p(ng-bind='photo.description')= photo.description
           p 
@@ -37,7 +37,7 @@ block content
             strong= t('tags')
             | :&nbsp;
             span
-              a.tag(ng-repeat="tag in photo.tags", href="{{tag.url}}")
+              a.tag(ng-repeat="tag in photo.tags", ng-href="{{tag.url}}")
                 span.label.label-default(ng-bind="tag.label")
             span.ng-hide(ng-hide="photo.tags")
               each tag in photo.tags

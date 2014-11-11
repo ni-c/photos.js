@@ -89,6 +89,7 @@ define([ 'moment' ], function(moment) {
 
           return res.render('archive', {
             page: 'archive',
+            pagetitle: 'Archive',
             tags: tagList,
             categories: categoryList,
             thumbnails: thumbnails,

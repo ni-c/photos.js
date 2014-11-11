@@ -101,7 +101,6 @@ define([ 'express' ], function(Express) {
    */
   Css.get('/ol.css', function(req, res, next) {
     requirejs([ 'path' ], function(path) {
-      console.log(path.join(req.app.get('dir'), 'bower_components', 'ol3-unofficial' , 'ol.css'));
       res.sendFile(path.join(req.app.get('dir'), 'bower_components', 'ol3-unofficial' , 'ol.css'));
     });
   });

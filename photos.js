@@ -105,6 +105,7 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'libs
         app.locals.baseurl = req.protocol + '://' + req.headers.host;
         app.locals.meta = req.app.get('config').meta;
         app.locals.breadcrumbs = [];
+        app.locals.keywords = req.app.get('config').meta.keywords;
         next();
       });
     
@@ -162,7 +163,7 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'libs
       // Errorhandler
       app.use(function(err, req, res, next) {
         var data = {};
-        if ('production' == env) {
+        if ('development' == env) {
           console.error(err.stack);
           data.err = err.stack;
         }
