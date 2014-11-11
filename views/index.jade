@@ -14,32 +14,32 @@ block content
           div.item(data-json="#{photo.next.href}.json")
             img(src=photo.next.src, alt="#{photo.next.title}")
       if photo.prev
-        a.left.carousel-control#prev-link(ng-href='#carousel-photos', role="button", data-slide="prev", href=photo.prev.href)
+        a.left.carousel-control#prev-link(ng-href=nojs?null:'#carousel-photos', role="button", data-slide="prev", href=photo.prev.href)
       else
-        a.left.carousel-control#prev-link(ng-href='#carousel-photos', role="button", data-slide="prev", href="#")
+        a.left.carousel-control#prev-link(ng-href=nojs?null:'#carousel-photos', role="button", data-slide="prev", href="#")
       if photo.next
-        a.right.carousel-control#next-link(ng-href='#carousel-photos', role="button", data-slide="next", href=photo.next.href)
+        a.right.carousel-control#next-link(ng-href=nojs?null:'#carousel-photos', role="button", data-slide="next", href=photo.next.href)
       else
-        a.right.carousel-control#next-link(ng-href='#carousel-photos', role="button", data-slide="next", href="#")
+        a.right.carousel-control#next-link(ng-href=nojs?null:'#carousel-photos', role="button", data-slide="next", href="#")
   div.container-full.description
     div.container 
       div.row
         div.col-md-8
           h1
-            span.title(ng-bind='photo.title')= photo.title
-            small(ng-bind='photo.date')= photo.date
-          p(ng-bind='photo.description')= photo.description
+            span.title(ng-bind=nojs?null:'photo.title')= photo.title
+            small(ng-bind=nojs?null:'photo.date')= photo.date
+          p(ng-bind=nojs?null:'photo.description')= photo.description
           p 
             strong= t('category')
             | :&nbsp;
-            a(href=photo.category.url, ng-href="{{photo.category.url}}", ng-bind='photo.category.label')= photo.category.label
+            a(href=photo.category.url, ng-href=nojs?null:photo.category.url, ng-bind=nojs?null:'photo.category.label')= photo.category.label
           p
             strong= t('tags')
             | :&nbsp;
             span
-              a.tag(ng-repeat="tag in photo.tags", ng-href="{{tag.url}}")
-                span.label.label-default(ng-bind="tag.label")
-            span.ng-hide(ng-hide="photo.tags")
+              a.tag(ng-repeat=nojs?null:'tag in photo.tags', ng-href=nojs?null:'{{tag.url}}')
+                span.label.label-default(ng-bind=nojs?null:"tag.label")
+            span.ng-hide(ng-hide=nojs?null:"photo.tags")
               each tag in photo.tags
                 a.tag(href="tag.url")
                   span.label.label-default= tag.label
@@ -47,37 +47,37 @@ block content
           p.hidden-xs
             strong= t('link')
             | :&nbsp;
-            a(href=photo.href, ng-bind="photo.href", ng-href="{{photo.href}}")= photo.href
+            a(href=photo.href, ng-bind=nojs?null:'photo.href', ng-href=nojs?null:'{{photo.href}}')= photo.href
         div.col-md-4
           div.panel.panel-default
             div.panel-heading= t('exif.exif-data')
             div.panel-body
               table.table.table-condensed#exif-table
                 tbody
-                  tr.exifdata(ng-show="photo.exif.model", class=(!photo.exif.model ? "hide" : ""))
+                  tr.exifdata(ng-show=nojs?null:"photo.exif.model", class=(!photo.exif.model ? "hide" : ""))
                     td.exif-icon(title=t('exif.camera'))
                       span.exif.exif-camera
-                    td(ng-bind="photo.exif.model")= photo.exif.model
-                  tr.exifdata(ng-show="photo.exif.lens", class=(!photo.exif.lens ? "hide" : ""))
+                    td(ng-bind=nojs?null:'photo.exif.model')= photo.exif.model
+                  tr.exifdata(ng-show=nojs?null:"photo.exif.lens", class=(!photo.exif.lens ? "hide" : ""))
                     td.exif-icon(title=t('exif.lens'))
                       span.exif.exif-lens
-                    td(ng-bind='photo.exif.lens')= photo.exif.lens
-                  tr.exifdata(ng-show="photo.exif.focallength", class=(!photo.exif.focallength ? "hide" : ""))
+                    td(ng-bind=nojs?null:'photo.exif.lens')= photo.exif.lens
+                  tr.exifdata(ng-show=nojs?null:"photo.exif.focallength", class=(!photo.exif.focallength ? "hide" : ""))
                     td.exif-icon(title=t('exif.focal-length'))
                       span.exif.exif-focallength
-                    td(ng-bind='photo.exif.focallength')= photo.exif.focallength
-                  tr.exifdata(ng-show="photo.exif.fnumber", class=(!photo.exif.fnumber ? "hide" : ""))
+                    td(ng-bind=nojs?null:'photo.exif.focallength')= photo.exif.focallength
+                  tr.exifdata(ng-show=nojs?null:"photo.exif.fnumber", class=(!photo.exif.fnumber ? "hide" : ""))
                     td.exif-icon(title=t('exif.aperture'))
                       span.exif.exif-aperture
-                    td(ng-bind='photo.exif.fnumber')= photo.exif.fnumber
-                  tr.exifdata(ng-show="photo.exif.exposuretime", class=(!photo.exif.exposuretime ? "hide" : ""))
+                    td(ng-bind=nojs?null:'photo.exif.fnumber')= photo.exif.fnumber
+                  tr.exifdata(ng-show=nojs?null:"photo.exif.exposuretime", class=(!photo.exif.exposuretime ? "hide" : ""))
                     td.exif-icon(title=t('exif.exposure'))
                       span.exif.exif-time
-                    td(ng-bind='photo.exif.exposuretime')= photo.exif.exposuretime
-                  tr.exifdata(ng-show="photo.exif.iso", class=(!photo.exif.iso ? "hide" : ""))
+                    td(ng-bind=nojs?null:'photo.exif.exposuretime')= photo.exif.exposuretime
+                  tr.exifdata(ng-show=nojs?null:"photo.exif.iso", class=(!photo.exif.iso ? "hide" : ""))
                     td.exif-icon(title=t('exif.iso'))
                       span.exif.exif-film
-                    td(ng-bind='photo.exif.iso')= photo.exif.iso
+                    td(ng-bind=nojs?null:'photo.exif.iso')= photo.exif.iso
       div.row
         div.col-md-12
           div#map
