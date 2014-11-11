@@ -27,7 +27,7 @@ block content
         div.col-md-8
           h1
             span.title(ng-bind=nojs?null:'photo.title')= photo.title
-            small(ng-bind=nojs?null:'photo.date')= photo.date
+            small.date(ng-bind=nojs?null:'photo.date')= photo.date
           p(ng-bind=nojs?null:'photo.description')= photo.description
           p 
             strong= t('category')
@@ -39,7 +39,7 @@ block content
             span
               a.tag(ng-repeat=nojs?null:'tag in photo.tags', ng-href=nojs?null:'{{tag.url}}')
                 span.label.label-default(ng-bind=nojs?null:"tag.label")
-            span.ng-hide(ng-hide=nojs?null:"photo.tags")
+            span(ng-hide=nojs?null:"photo.tags", class=nojs?null:'ng-hide')
               each tag in photo.tags
                 a.tag(href="tag.url")
                   span.label.label-default= tag.label
