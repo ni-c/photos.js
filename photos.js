@@ -98,7 +98,7 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       });
     }
 
-    requirejs([ 'routes/photo', 'routes/css', 'routes/js', 'routes/static', 'routes/archive' ], function(photo,css, js, stat, archive) {
+    requirejs([ 'routes/photo', 'routes/css', 'routes/js', 'routes/static', 'routes/archive', 'routes/feed' ], function(photo,css, js, stat, archive, feed) {
 
       // Set locals
       app.all('*', function(req, res, next) {
@@ -120,6 +120,9 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'libs/mongodb
       app.use('/photo', express.static(__dirname + '/photos'));
       app.use('/img', express.static(__dirname + '/views/img'));
       
+      // RSS Feed
+      app.get('/feed.rss', feed.render);
+
       // CSS files
       app.use('/css', css);
 
