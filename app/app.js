@@ -87,9 +87,12 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
       $scope.photo = data;
       $('tr.exifdata').removeClass('hide');
 
+      
       if (data.exif.gps) {
         initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
-      } 
+      } else {
+        $('#map').css('display', 'none');
+      }
     });
 
     // carousel slid-event
@@ -136,8 +139,10 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
         });
 
         $('#map').empty();
+        $('#map').css('display', 'none');
         if (data.exif.gps) {
           initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
+          $('#map').css('display', '');
         }
 
         // Reset popstate
