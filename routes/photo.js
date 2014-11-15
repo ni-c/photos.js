@@ -35,6 +35,9 @@ define([ 'moment' ], function(moment) {
       if (req.params.file && (endsWith(req.params.file, '.jpg'))) {
         imageFiles.findOne({filename: req.params.file}, {_id: 1}, function(err, image) {
           if (err) throw new Error(err);
+          if (!image) {
+            return next();
+          }
           req.app.get('grid').get(image._id, function(err, data) {
             if (err) throw new Error(err);
             return res.send(data);

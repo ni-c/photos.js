@@ -102,8 +102,21 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'libs
 
       // Set locals
       app.all('*', function(req, res, next) {
+
+        // Deactive JavaScript for given agents
+        nojsAgents = [ 'W3C_Validator' ];
+        app.locals.nojs = false;
+        app.locals.nometadata = false;
+        nojsAgents.forEach(function(agent) {
+          if (req.headers['user-agent'].indexOf(agent) === 0) {
+            app.locals.nojs = true;
+            app.locals.nometadata = true;
+          } 
+        });
+
         app.locals.baseurl = req.protocol + '://' + req.headers.host;
         app.locals.meta = req.app.get('config').meta;
+        app.locals.feed = req.app.get('config').feed;
         app.locals.breadcrumbs = [];
         app.locals.keywords = req.app.get('config').meta.keywords;
         next();
@@ -163,8 +176,8 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'libs
       // Errorhandler
       app.use(function(err, req, res, next) {
         var data = {};
+        console.error(err.stack);
         if ('development' == env) {
-          console.error(err.stack);
           data.err = err.stack;
         }
         res.status(500);
