@@ -159,38 +159,6 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
       });
     });
 
-    // Trigger carousel if back button is clicked
-    $(window).on('popstate', function () {
-      popstate = true;
-      var index = $('#carousel-photos .active').index('#carousel-photos .item');
-      var targetIndex = $('#carousel-photos .item[data-json="' +  history.state.json + '"]').index('#carousel-photos .item');
-      if (index > targetIndex) {
-        $('#carousel-photos').carousel('prev');
-      } else {
-        $('#carousel-photos').carousel('next');
-      }
-    });
-
-    $(document).keydown(function(event) {
-      switch (event.keyCode) {
-        // right & k
-        case 39:
-        case 75:
-          event.preventDefault();
-          $('#carousel-photos').carousel('next');
-          break;
-        // left & j
-        case 37:
-        case 74:
-          event.preventDefault();
-          $('#carousel-photos').carousel('prev');
-          break;
-      }
-    });
-
-    // Openlayers CSS
-    $('head').append('<link rel="stylesheet" href="' + baseurl + '/css/ol.css" type="text/css" />');
-
     // Hide & Show arrows
     function hideControls() {
       $('.carousel-control').fadeOut(500);
@@ -204,6 +172,44 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
       clearTimeout(hideFunc);
       hideFunc = setTimeout(hideControls, 1000);
     });
+
+    // Trigger carousel if back button is clicked
+    $(window).on('popstate', function () {
+      popstate = true;
+      var index = $('#carousel-photos .active').index('#carousel-photos .item');
+      var targetIndex = $('#carousel-photos .item[data-json="' +  history.state.json + '"]').index('#carousel-photos .item');
+      if (index > targetIndex) {
+        $('#carousel-photos').carousel('prev');
+        hideControls();
+      } else {
+        $('#carousel-photos').carousel('next');
+        hideControls();
+      }
+    });
+
+    $(document).keydown(function(event) {
+      switch (event.keyCode) {
+        // right & k
+        case 39:
+        case 75:
+          event.preventDefault();
+          $('#carousel-photos').carousel('next');
+          clearTimeout(hideFunc);
+          hideFunc = setTimeout(hideControls, 1000);
+          break;
+        // left & j
+        case 37:
+        case 74:
+          event.preventDefault();
+          $('#carousel-photos').carousel('prev');
+          clearTimeout(hideFunc);
+          hideFunc = setTimeout(hideControls, 1000);
+          break;
+      }
+    });
+
+    // Openlayers CSS
+    $('head').append('<link rel="stylesheet" href="' + baseurl + '/css/ol.css" type="text/css" />');
 
   });
   angular.element(document).ready(function() {
