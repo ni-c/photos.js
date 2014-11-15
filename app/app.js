@@ -152,6 +152,8 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
           initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
         }
 
+        $('.carousel-control').removeClass("hidden");
+
         // Reset popstate
         popstate = false;
       });

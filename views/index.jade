@@ -14,13 +14,13 @@ block content
           div.item(data-json="#{photo.next.href}.json")
             img(src=photo.next.src, alt="#{photo.next.title}")
       if photo.prev
-        a.left.carousel-control#prev-link(ng-href=nojs?null:'#carousel-photos', role="button", data-slide="prev", href=photo.prev.href)
+        a.left.carousel-control#prev-link(ng-href=nojs?null:'#carousel-photos', ng-show=nojs?null:"photo.prev", role="button", data-slide="prev", href=photo.prev.href)
       else
-        a.left.carousel-control#prev-link(ng-href=nojs?null:'#carousel-photos', role="button", data-slide="prev", href="#")
+        a.left.carousel-control.hidden#prev-link(ng-href=nojs?null:'#carousel-photos', ng-show=nojs?null:"photo.prev", role="button", data-slide="prev", href="#")
       if photo.next
-        a.right.carousel-control#next-link(ng-href=nojs?null:'#carousel-photos', role="button", data-slide="next", href=photo.next.href)
+        a.right.carousel-control#next-link(ng-href=nojs?null:'#carousel-photos', ng-show=nojs?null:"photo.next", role="button", data-slide="next", href=photo.next.href)
       else
-        a.right.carousel-control#next-link(ng-href=nojs?null:'#carousel-photos', role="button", data-slide="next", href="#")
+        a.right.carousel-control.hidden#next-link(ng-href=nojs?null:'#carousel-photos', ng-show=nojs?null:"photo.next", role="button", data-slide="next", href="#")
   div.container-full.description
     div.container 
       div.row

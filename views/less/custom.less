@@ -7,8 +7,86 @@ footer {
   color: #e3e3e3;
 }
 
-.carousel-control.left, .carousel-control.right {
-    background-image: none
+.carousel-control.left {
+  background-image: url(../img/arrow-left.svg);
+  background-repeat: no-repeat;
+  background-position: left center;
+  @media (min-width: 1320px) {
+    left: -7%;
+  }
+  @media (max-width: 1320px) {
+    left: 0px;
+  }
+
+  @media (max-width: 1200px) { 
+    left: -8%;
+  }
+
+  @media (max-width: 1090px) {
+    left: 0px;
+  }  
+
+  @media (max-width: 992px) {
+    left: -10%;
+  }
+
+  @media (max-width: 880px) {
+    left: 0px;
+  }
+}
+
+.carousel-control.right {
+  background-image: url(../img/arrow-right.svg);
+  background-repeat: no-repeat;
+  background-position: right center;
+  @media (min-width: 1320px) {
+    right: -7%;
+  }
+  @media (max-width: 1320px) {
+    right: 0px;
+  }
+
+  @media (max-width: 1200px) { 
+    right: -8%;
+  }
+
+  @media (max-width: 1090px) {
+    right: 0px;
+  }  
+
+  @media (max-width: 992px) {
+    right: -10%;
+  }
+
+  @media (max-width: 880px) {
+    right: 0px;
+  }
+}
+
+.carousel-control {
+  opacity: 0.3;
+  @media (min-width: 1320px) {
+    width: 57%;
+  }
+  @media (max-width: 1320px) {
+    width: 50%;
+  }
+
+  @media (max-width: 1200px) { 
+    width: 58%;
+  }
+
+  @media (max-width: 1090px) {
+    width: 50%;
+  }  
+
+  @media (max-width: 992px) {
+    width: 60%;
+  }
+
+  @media (max-width: 880px) {
+    width: 50%;
+  }
 }
 
 .navbar-inverse {
