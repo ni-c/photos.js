@@ -191,6 +191,20 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
     // Openlayers CSS
     $('head').append('<link rel="stylesheet" href="' + baseurl + '/css/ol.css" type="text/css" />');
 
+    // Hide & Show arrows
+    function hideControls() {
+      $('.carousel-control').fadeOut(500);
+    }
+    var hideFunc = setTimeout(hideControls, 2000);
+    $('#carousel-photos').bind('mouseenter touchstart', function() {
+      clearTimeout(hideFunc);
+      $('.carousel-control').fadeIn(500); 
+    });
+    $('#carousel-photos').bind('mouseleave touchend', function() {
+      clearTimeout(hideFunc);
+      hideFunc = setTimeout(hideControls, 1000);
+    });
+
   });
   angular.element(document).ready(function() {
     angular.bootstrap(document, [ 'photosApp' ]);
