@@ -131,7 +131,7 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
         }
 
         // Set title
-        document.title = data.title + ' | ' + $('meta[name="DC.Title"').attr('content');
+        $(document).prop('title',data.title + ' | ' + $('meta[name="DC.Title"]').attr('content'));
 
         // Only push history if the event was not triggered by popstate
         if (!popstate) {
