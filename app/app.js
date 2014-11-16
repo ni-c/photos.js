@@ -16,7 +16,6 @@ require.config({
   }
 });
 
-
 // Application
 require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($, moment) {
 
@@ -86,7 +85,9 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
     };
 
     // Initialize angularJs
-    $http.get(baseurl + '/photo/' + $('#slug').val() + '.json', { cache: true }).success(function(data) {
+    var url = baseurl + '/photo/' + $('#slug').val() + '.json';
+    url = url + '?r=true';
+    $http.get(url, { cache: true }).success(function(data) {
       $scope.photo = data;
       $('tr.exifdata').removeClass('hide');
 
@@ -102,8 +103,9 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
     $('#carousel-photos').on('slid.bs.carousel', function(e) {
 
       // load data from server
-      var href = $(this).find('.active').attr('data-json');
-      $http.get(href, { cache: true }).success(function(data) {
+      var url = $(this).find('.active').attr('data-json');
+      url = url + '?w=' + $(window).width() + '&h=' + $(window).height();
+      $http.get(url, { cache: true }).success(function(data) {
         $scope.photo = data;
 
         if (e.direction == 'left') {

@@ -24,5 +24,10 @@
   },
   "sitemap": {
     "site_url": "http://localhost:8080"
+  },
+  "piwik": {
+    "enabled": false,
+    "site_id": 1,
+    "url": "http://mywebsite.com/piwik.php'"
   }
 }

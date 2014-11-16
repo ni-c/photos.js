@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
   var define = require('amdefine')(module);
 }
 
-define([ 'moment' ], function(moment) {
+define([ 'moment', 'libs/piwikHelper' ], function(moment, piwikHelper) {
 
   /**
    * photo-Controller
@@ -119,6 +119,11 @@ define([ 'moment' ], function(moment) {
                 };
 
                 if (req.params.file && (endsWith(req.params.file, '.json'))) {
+
+                  if (!req.query.r) {
+                    piwikHelper.track(req, photo.href, image[0].metadata.slug);
+                  }
+
                   return res.json(photo);
                 } else {
                   tagList.forEach(function(tag) {
@@ -128,6 +133,9 @@ define([ 'moment' ], function(moment) {
                   if (photo.exif.gps) {
                     coordinates = photo.exif.gps.longitude.decimal + ';' + photo.exif.gps.latitude.decimal
                   }
+
+                  piwikHelper.track(req, photo.href, image[0].metadata.slug);
+
                   return res.render('index', {
                     photo: photo,
                     coordinates: coordinates,

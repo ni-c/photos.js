@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
   var define = require('amdefine')(module);
 }
 
-define([ 'express' ], function(Express) {
+define([ 'express','libs/piwikHelper' ], function(Express, piwikHelper) {
 
   /**
    * Static-Controller
@@ -28,6 +28,9 @@ define([ 'express' ], function(Express) {
     for (item in req.app.get('bower').dependencies) {
       components.push(item);
     }
+
+    piwikHelper.track(req, req.app.locals.baseurl + '/about', 'about');
+
     return res.render('about', {
       packages: packages,
       components: components,

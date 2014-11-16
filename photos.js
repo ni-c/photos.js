@@ -14,7 +14,7 @@ requirejs.config({
   nodeRequire: require
 });
 
-requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'libs/mongodbHelper' ], function(express, config, jade, i18n, moment, path, mongodbHelper) {
+requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'piwik-tracker', 'libs/mongodbHelper' ], function(express, config, jade, i18n, moment, path, piwiktracker, mongodbHelper) {
 
   // Get environment, to start in production environment use:
   // $ NODE_ENV=production node photos.js
@@ -57,6 +57,11 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'libs
     env: env
   });
   app.set('config', config);
+
+  // Initialize PIWIK
+  if (config.piwik && config.piwik.enabled) {
+    app.set('piwik', new piwiktracker(config.piwik.site_id, config.piwik.url));
+  }
 
   // Connect to the mongodb and initialize gridfs
   mongodbHelper.connect(config.mongodb, function(err, result) {

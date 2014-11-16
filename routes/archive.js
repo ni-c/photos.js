@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
   var define = require('amdefine')(module);
 }
 
-define([ 'moment' ], function(moment) {
+define([ 'moment','libs/piwikHelper' ], function(moment, piwikHelper) {
 
   /**
    * archive-Controller
@@ -86,6 +86,8 @@ define([ 'moment' ], function(moment) {
           }
           categoryList.sort(alphabetical);
           tagList.sort(alphabetical);
+
+          piwikHelper.track(req, req.app.locals.baseurl + '/archive', 'archive');
 
           return res.render('archive', {
             page: 'archive',
