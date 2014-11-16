@@ -131,9 +131,14 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'piwi
       app.get('/', photo.render);
       app.get('/photo/:file', photo.render);
       
-      app.get('/archive', archive.render)
-      app.get('/archive/category/:category', archive.render)
-      app.get('/archive/tag/:tag', archive.render)
+      // Archive
+      app.get('/archive', archive.render);
+      app.get('/archive/category/:category', archive.render);
+      app.get('/archive/tag/:tag', archive.render);
+
+      // Archive map
+      app.get('/archive/map', archive.map);
+      app.get('/archive/map.json', archive.mapJson);
 
       // Static routes
       app.use('/photo', express.static(__dirname + '/photos'));

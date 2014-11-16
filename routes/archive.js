@@ -41,7 +41,7 @@ define([ 'moment','libs/piwikHelper' ], function(moment, piwikHelper) {
         query["metadata.category.slug"] = req.params.category;
       }
 
-      imageFiles.find().sort({'metadata.exif.datetimeoriginal': -1}).toArray(function(err, images) {
+      imageFiles.find({}, {'metadata': 1}).sort({'metadata.exif.datetimeoriginal': -1}).toArray(function(err, images) {
         // TODO Error handling
         if (err) throw new Error(err);
 
@@ -67,7 +67,7 @@ define([ 'moment','libs/piwikHelper' ], function(moment, piwikHelper) {
           });
         });
 
-        imageFiles.find(query).sort({'metadata.exif.datetimeoriginal': -1}).toArray(function(err, images) {
+        imageFiles.find(query, {'metadata': 1}).sort({'metadata.exif.datetimeoriginal': -1}).toArray(function(err, images) {
           // TODO Error handling
           if (err) throw new Error(err);
           images.forEach(function(image) {
@@ -102,6 +102,46 @@ define([ 'moment','libs/piwikHelper' ], function(moment, piwikHelper) {
       });
     });
   }
+
+  /**
+   * Renders the archive map
+   * 
+   * @method map
+   * @param {Object} req The request
+   * @param {Object} res The response
+   * @param {Object} next The next route
+   */
+  Archive.map = function(req, res, next) {
+    return res.render('map', {
+      page: 'map',
+      pagetitle: 'Map',
+      hidefooter: true
+    });
+  };
+
+  /**
+   * Returns the archive map data
+   * 
+   * @method mapJson
+   * @param {Object} req The request
+   * @param {Object} res The response
+   * @param {Object} next The next route
+   */
+  Archive.mapJson = function(req, res, next) {
+    req.app.get('db').collection('image.files', function(err, imageFiles) {
+      imageFiles.find({'metadata.exif.gps': { $exists: true }}, {'metadata': 1}).sort({'metadata.exif.datetimeoriginal': 1}).toArray(function(err, images) {
+        var imageList = [];
+        images.forEach(function(image) {
+          imageList.push({
+            url: req.app.locals.baseurl + '/photo/' + image.metadata.slug,
+            coordinates: [ image.metadata.exif.gps.longitude.decimal, image.metadata.exif.gps.latitude.decimal ],
+            base64: "data:image/jpg;base64," + image.metadata.thumbnail
+          });
+        })
+        return res.json(imageList);
+      });
+    });
+  };
 
   var exports = Archive;
 

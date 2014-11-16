@@ -70,12 +70,15 @@ html
                     a(href="#{baseurl}/#{breadcrumb.href}")= breadcrumb.title
           - }
           ul.nav.navbar-nav.navbar-right
+            li(class=page=='map'?'active':undefined)
+              a(href="#{baseurl}/archive/map")= t('map')
             li(class=page=='archive'?'active':undefined)
               a(href="#{baseurl}/archive")= t('archive')
             li(class=page=='about'?'active':undefined)
               a(href="#{baseurl}/about")= t('about')
     block content
-    footer
-      div.container.footer.text-center
-        - if (!nometadata)
-          p!= meta.footer
+    - if (!hidefooter)
+      footer
+        div.container.footer.text-center
+          - if (!nometadata)
+            p!= meta.footer

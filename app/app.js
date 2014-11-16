@@ -212,11 +212,100 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
 
     // Openlayers CSS
     $('head').append('<link rel="stylesheet" href="' + baseurl + '/css/ol.css" type="text/css" />');
-
   });
+
   angular.element(document).ready(function() {
     angular.bootstrap(document, [ 'photosApp' ]);
   });
 
+  // Archive Map
+  if ($('#archivemap').length > 0) {
+    
+    // Openlayers CSS
+    $('head').append('<link rel="stylesheet" href="' + baseurl + '/css/ol.css" type="text/css" />');
+
+    var coordinates = [65, 30];
+
+    $.get(baseurl + '/archive/map.json', function( images ) {
+
+      var features = [];
+
+      images.forEach(function(image) {
+
+        var iconFeature = new ol.Feature({
+          geometry: new ol.geom.Point(ol.proj.transform(image.coordinates, 'EPSG:4326', 'EPSG:3857')),
+          url: image.url
+        });
+
+        var iconStyle = new ol.style.Style({
+          image: new ol.style.Icon(({
+            anchor: [0.5, 75],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.9,
+            scale: 1.0,
+            src: image.base64,
+          }))
+        });
+
+        iconFeature.setStyle(iconStyle);
+
+        features.push(iconFeature);
+
+      });
+
+      var vectorSource = new ol.source.Vector({
+        features: features
+      });
+
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+      });
+
+      var view = new ol.View({
+        center: ol.proj.transform(coordinates, 'EPSG:4326', 'EPSG:3857'),
+        zoom: 2.8
+      });
+
+      var map = new ol.Map({
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        target: 'archivemap',
+        controls: ol.control.defaults({
+        }),
+        view: view
+      });
+
+      // go to url on click
+      map.on('singleclick', function(evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+          function(feature, layer) {
+            return feature;
+          });
+        if (feature) {
+          window.location.href = feature.get('url');
+        }
+      });
+
+      // change mouse cursor when over marker
+      $(map.getViewport()).on('mousemove', function(e) {
+        var pixel = map.getEventPixel(e.originalEvent);
+        var hit = map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+          return true;
+        });
+        if (hit) {
+          $('#archivemap').css('cursor', 'pointer');
+        } else {
+          $('#archivemap').css('cursor', '');
+        }
+      });      
+
+    }, 'json');
+
+  }
 
 });
