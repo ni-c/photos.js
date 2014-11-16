@@ -28,6 +28,7 @@
   "piwik": {
     "enabled": false,
     "site_id": 1,
-    "url": "http://mywebsite.com/piwik.php'"
+    "url": "http://mywebsite.com/piwik.php",
+    "token_auth": "0123456789abcdef"
   }
 }

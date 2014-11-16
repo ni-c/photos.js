@@ -29,10 +29,14 @@ define([ 'crypto' ], function(crypto) {
         ua: req.headers['user-agent'],
         cip: ip,
         uid: uid.digest('hex'),
-        lang: req.headers['accept-language']
+        lang: req.headers['accept-language'],
+        urlref: req.headers['referer']
       };
+      if (req.app.get('config').piwik.token_auth) {
+        data.auth_token = req.app.get('config').piwik.token_auth;
+      }
       if (req.query.w && req.query.h) {
-        data.res = req.query.w + 'x' + req.query.h
+        data.res = req.query.w + 'x' + req.query.h;
       }
       req.app.get('piwik').track(data);
     }
