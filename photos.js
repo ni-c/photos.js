@@ -113,7 +113,7 @@ requirejs([ 'express', 'config-node', 'jade', 'i18next', 'moment', 'path', 'piwi
         app.locals.nojs = false;
         app.locals.nometadata = false;
         nojsAgents.forEach(function(agent) {
-          if (req.headers['user-agent'].indexOf(agent) === 0) {
+          if (req.header && req.headers['user-agent'] && req.headers['user-agent'].indexOf(agent) === 0) {
             app.locals.nojs = true;
             app.locals.nometadata = true;
           } 

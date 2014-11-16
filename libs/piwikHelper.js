@@ -20,7 +20,7 @@ define([ 'crypto' ], function(crypto) {
    */
   PiwikHelper.track = function(req, url, action_name) {
     if (req.app.get('piwik')) {
-      var ip = req.headers['X-Forwarded-For'] || req.connection.remoteAddress;
+      var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
       var uid = crypto.createHash('sha1');
       uid.update(ip + '-' + req.headers['user-agent']);
       var data = {
