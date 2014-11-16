@@ -33,7 +33,7 @@ define([ 'crypto' ], function(crypto) {
         urlref: req.headers['referer']
       };
       if (req.app.get('config').piwik.token_auth) {
-        data.auth_token = req.app.get('config').piwik.token_auth;
+        data.token_auth = req.app.get('config').piwik.token_auth;
       }
       if (req.query.w && req.query.h) {
         data.res = req.query.w + 'x' + req.query.h;

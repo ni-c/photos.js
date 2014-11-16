@@ -5,9 +5,9 @@ if (typeof define !== 'function') {
 define([ 'mongodb' ], function(mongodb) {
 
   /**
-   * MongoDbFactory
+   * MongodbHelper
    *
-   * @class Photo
+   * @class MongodbHelper
    * @constructor 
    */
   var MongodbHelper = function() {}
