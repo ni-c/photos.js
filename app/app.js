@@ -93,9 +93,8 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
 
       
       if (data.exif.gps) {
+        $('#map').show();
         initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
-      } else {
-        $('#map').css('display', 'none');
       }
     });
 
@@ -148,9 +147,9 @@ require([ 'jquery', 'moment', 'angular', 'bootstrap', 'openlayers' ], function($
 
         // Reinitialize Map
         $('#map').empty();
-        $('#map').css('display', 'none');
+        $('#map').hide();
         if (data.exif.gps) {
-          $('#map').css('display', '');
+          $('#map').show();
           initMap([ data.exif.gps.longitude.decimal, data.exif.gps.latitude.decimal ]);
         }
 
